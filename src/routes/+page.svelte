@@ -1,10 +1,10 @@
 <script lang="ts">
   import * as d3 from "d3";
   import { onMount } from "svelte";
-  import type { TMovie } from "../../types";
-  import Bar from "../../lib/Bar.svelte";
-  import LineChart from "../../lib/LineChart.svelte";
-  import CorrelationMatrix from "../../lib/CorrelationMatrix.svelte";
+  import type { TMovie } from "../types";
+  import Bar from "../lib/Bar.svelte";
+  import LineChart from "../lib/LineChart.svelte";
+  import CorrelationMatrix from "../lib/CorrelationMatrix.svelte";
 
 
   //In completing this assignment, I utilized ChatGPT for helping in assistance with the code for my line chart and correlation matrix implementations. 
