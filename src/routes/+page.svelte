@@ -49,7 +49,7 @@
   onMount(loadCsv);
 </script>
 
-<h1>Summer Movies</h1>
+<h1>Heart Disease/Patterns in Health Status</h1>
 
 <p>Here are {movies.length == 0 ? "..." : movies.length + " "} movies</p>
 <!-- <Bar {movies} /> -->
