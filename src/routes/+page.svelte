@@ -96,6 +96,10 @@
 <h1>WHAT SHAPES OUR HEARTS?</h1>
 
 <p>Here are {people.length == 0 ? "..." : people.length + " "} [people]</p>
+
+
+<p>Here are {cause_Of_Death.length == 0 ? "..." : cause_Of_Death.length + " "} [cause_Of_Death]</p>
+
 <!-- <Bar {movies} /> -->
 <!--<Bar {movies} width={600} height={400} />-->
 
