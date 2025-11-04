@@ -15,7 +15,7 @@
   // Function to loads in the Kaggle CSV
   async function loadKaggleCsv() {
     try {
-      const csvUrl = "./summer_movies.csv";
+      const csvUrl = "./transformed_heart_data_to_numerical.csv";
       data = await d3.csv(csvUrl, (row) => {
         // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
         return {
