@@ -24,14 +24,13 @@
         return {
 
          
-          Causes: (row["Cause"].slice(1)).trim(), // causes of death
-          All:  Number(row["All"].slice(1)), //all years
-          2017: Number(row["2017"].slice(1)), //2017
-          2018: Number(row["2018"].slice(1)), //2018
-          2019: Number(row["2019"].slice(1)), //2019
-          2020: Number(row["2020"].slice(1)), //2020      
-          2021: Number(row["2021"].slice(1)), //2021  
-          2022: Number(row["2022"].slice(1)), //2022              
+          Causes: (row["Cause"]).trim(), // causes of death
+          2017: Number(row["2017"]), //2017
+          2018: Number(row["2018"]), //2018
+          2019: Number(row["2019"]), //2019
+          2020: Number(row["2020"]), //2020      
+          2021: Number(row["2021"]), //2021  
+          2022: Number(row["2022"]), //2022              
         
           // ...row, // spread syntax to copy all properties from row
           // num_votes: Number(row.num_votes),
