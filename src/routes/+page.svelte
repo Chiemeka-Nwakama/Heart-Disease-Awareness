@@ -12,25 +12,33 @@
   // Reactive variable for storing the data
   let movies: TMovie[] = [];
 
-  // Function to load the CSV
-  async function loadCsv() {
+  // Function to loads in the Kaggle CSV
+  async function loadKaggleCsv() {
     try {
       const csvUrl = "./summer_movies.csv";
-      movies = await d3.csv(csvUrl, (row) => {
+      data = await d3.csv(csvUrl, (row) => {
         // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
         return {
 
          
-          simple_title: row.simple_title.trim(), // remove extra spaces
-          primary_title: row.primary_title.trim(), // remove extra spaces
-          original_title: row.original_title.trim(), // remove extra spaces
-          genres: row.genres.trim().split(","), // remove extra spaces
-          year: new Date(row.year), //year as date                   
-          average_rating: Number(row.average_rating),     // convert to number
-          num_votes: Number(row.num_votes), // convert to number
-          run_time: Number(row.run_time),   // convert to number
-          tconst: row.tconst.trim(), // convert to number
-          title_type: row.title_type.trim(), // remove extra spaces
+          State: row.State.trim(), // As is
+          Sex: row.Sex.trim(), // Male and Female
+          SleepHours: Number(row.SleepHours), // unmber in Hours
+          HadHeartAttack: Number(row.HadHeartAttack),// 0 = no, 1 = yes
+          HadAngina: Number(row.HadAngina), // 0 = no, 1 = yes            
+          HadStroke: Number(row.HadStroke),  // 0 = no, 1 = yes
+          HadCOPD: Number(row.HadCOPD), // 0 = no, 1 = yes               
+          CovidPos: Number(row.CovidPos),  // 0 = no, 1 = yes  
+          AlcoholDrinkers: Number(row.AlcoholDrinkers), // 0 = no, 1 = yes
+          HadDiabetes: Number(row.HadDiabetes), // 0 = no, 1 = yes, 2 = No, pre-diabetes or borderline diabetes, 3 = Yes, but only during pregnancy (female) 
+          HadDepressiveDisorder: Number(row.HadDepressiveDisorder),   // 0 = no, 1 = yes
+          SmokerStatus: Number(row.SmokerStatus), // 0 = Never Smoked, 1 = Former Smoker, 2 = Current Smoker - now smokes some days, 3 = Current Smoker - now smokes some days
+          ECigaretteUsage: Number(row.ECigaretteUsage), //0 = Never used e-ciggaretes, in my entire life, 1 = Not current, 2 = Use them every day, 3 = Use them some days
+          AgeCategory: Number(row.AgeCategory), // "Age 18 to 24" = 0 | "Age 25 to 29" = 1 | "Age 30 to 34" = 2 | "Age 35 to 39" = 3 | "Age 40 to 44" = 4 | "Age 45 to 49" = 5 | "Age 50 to 54" = 6 | "Age 55 to 59" = 7 | "Age 60 to 64" = 8 | "Age 65 to 69" = 9 | "Age 70 to 74" = 10 | "Age 75 to 79" = 11 | "Age 80 or older" = 12
+          RaceEthnicityCategory: Number(row.RaceEthnicityCategory), // 0 = 'White only, Non-Hispanic' | 1 = 'Black only, Non-Hispanic' | 2 = 'Other race only, Non-Hispanic' | 3 = 'Multiracial, Non-Hispanic' | 4 = 'Hispanic'
+          BMI: Number(row.BMI), //BMI in number
+          WeightInKilograms: Number(row.WeightInKilograms), // weight in kilos
+          HeightInMeters: Number(row.HeightInMeters), //height in meters
 
 
           // ...row, // spread syntax to copy all properties from row
@@ -46,22 +54,21 @@
     }
   }
   // Call the loader when the component mounts
-  onMount(loadCsv);
+  onMount(loadKaggleCsv);
 </script>
 
-<h1>Heart Disease/Patterns in Health Status</h1>
+<h1>WHAT SHAPES OUR HEARTS?</h1>
 
 <p>Here are {movies.length == 0 ? "..." : movies.length + " "} movies</p>
 <!-- <Bar {movies} /> -->
 <Bar {movies} width={600} height={400} />
 
-<h1>Q1: How do the top three movie genres (by number of movies) change over time?</h1>
+
 
 
 <!-- put final graph here for Q1-->
 <LineChart {movies} width={1200} height={400} />
 
-<h1>Q2: Are there any correlations between different genres?</h1>
 
 <CorrelationMatrix {movies} width={1200} height={800} />
 
