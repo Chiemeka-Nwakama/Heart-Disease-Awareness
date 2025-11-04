@@ -48,7 +48,7 @@
         };
       });
 
-      console.log("Loaded CSV Data:", movies);
+      console.log("Loaded CSV Data:", people);
     } catch (error) {
       console.error("Error loading CSV:", error);
     }
