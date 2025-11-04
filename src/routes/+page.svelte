@@ -1,29 +1,29 @@
 <script lang="ts">
   import * as d3 from "d3";
   import { onMount } from "svelte";
-  import type { People } from "../types";
-  import Bar from "../lib/Bar.svelte";
-  import LineChart from "../lib/LineChart.svelte";
-  import CorrelationMatrix from "../lib/CorrelationMatrix.svelte";
+  import type { Person } from "../types";
+  //import Bar from "../lib/Bar.svelte";
+  //import LineChart from "../lib/LineChart.svelte";
+  //import CorrelationMatrix from "../lib/CorrelationMatrix.svelte";
 
 
   //In completing this assignment, I utilized ChatGPT for helping in assistance with the code for my line chart and correlation matrix implementations. 
 
   // Reactive variable for storing the data
-  let people: People[] = [];
+  let people: Person[] = [];
 
   // Function to loads in the Kaggle CSV
   async function loadKaggleCsv() {
     try {
       const csvUrl = "./transformed_heart_data_to_numerical.csv";
-      data = await d3.csv(csvUrl, (row) => {
+      people = await d3.csv(csvUrl, (row) => {
         // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
         return {
 
          
           State: row.State.trim(), // As is
-          Sex: row.Sex.trim(), // Male and Female
-          SleepHours: Number(row.SleepHours), // unmber in Hours
+          Sex: Number(row.Sex), //0 = Female,  1 = Male
+          SleepHours: Number(row.SleepHours), // nunmber in Hours
           HadHeartAttack: Number(row.HadHeartAttack),// 0 = no, 1 = yes
           HadAngina: Number(row.HadAngina), // 0 = no, 1 = yes            
           HadStroke: Number(row.HadStroke),  // 0 = no, 1 = yes

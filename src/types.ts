@@ -1,7 +1,7 @@
-export type People = {
+export type Person = {
     State: string; // As is
-    Sex: number; // Male and Female
-    SleepHours: number;  // unmber in Hours
+    Sex: number; // 0 = Female,  1 = Male
+    SleepHours: number;  // number in Hours
     HadHeartAttack: number; // 0 = no, 1 = yes
     HadAngina: number;  // 0 = no, 1 = yes            
     HadStroke: number;   // 0 = no, 1 = yes
