@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import type { Person, State, Mortality, Income, Top5 } from "./types";
+import type { Person, StateData, Top5 } from "./types";
 
 export async function loadTop5Csv(): Promise<Top5[]> {
   try {
@@ -19,44 +19,6 @@ export async function loadTop5Csv(): Promise<Top5[]> {
     return data;
   } catch (error) {
     console.error("Error loading Top 5 CSV:", error);
-    return [];
-  }
-}
-
-export async function loadIncomeCSV(): Promise<Income[]> {
-  try {
-    const csvUrl = "./Income.csv";
-    const data = await d3.csv(csvUrl, (row) => {
-      return {
-        State: row.State.trim(),
-        Median2022: Number(row.Median2022),
-        Error2022: Number(row.Error2022),
-        Median202224: Number(row.Median202224),
-        Error202224: Number(row.Error202224),
-      };
-    });
-    console.log("Loaded Income Data:", data);
-    return data;
-  } catch (error) {
-    console.error("Error loading Income CSV:", error);
-    return [];
-  }
-}
-
-export async function loadMortality(): Promise<Mortality[]> {
-  try {
-    const csvUrl = "./mortality.csv";
-    const data = await d3.csv(csvUrl, (row) => {
-      return {
-        State: row.STATE.trim(),
-        Rate: Number(row.RATE),
-        Deaths: Number(row.DEATHS),
-      };
-    });
-    console.log("Loaded Mortality CSV Data:", data);
-    return data;
-  } catch (error) {
-    console.error("Error loading Mortality CSV:", error);
     return [];
   }
 }
@@ -93,50 +55,55 @@ export async function loadKaggleCsv(): Promise<Person[]> {
     return [];
   }
 }
+export async function loadStateData(): Promise<StateData[]>  {
+    try {
+      const csvUrl = "./State_Data.csv";
+      const data = await d3.csv(csvUrl, (row) => {
+        // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
+        return {
+          StateCode: Number(row.StateCode),
+          StateAbv: row.StateAbbrev.trim(),
+          IncMedian2022: Number(row.Median2022),
+          IncError2022: Number(row.Error2022),
+          IncMedian202224: Number(row.Median202224),
+          IncError202224: Number(row.Error202224), 
+          MortalityRate: Number(row.RATE),
+          DeathCount: Number(row.DEATHS),
+          StateName: row.StateName.trim(),
+          TotalSchool: Number(row.TotalSchooling),
+          NoSchool: Number(row.NoSchooling),
+          ElemSchool: Number(row.ElemSchool),
+          MidSchool: Number(row.MidSchool),
+          SomeHigh: Number(row.SomeHigh),
+          DiplomaGED: Number(row.HighSchoolDiplomaGED),
+          SomeColl: Number(row.SomeCollege),
+          Assoc: Number(row.Associates),
+          Bach: Number(row.Bachelors),
+          Masters: Number(row.ProfessionalMaster),
+          Doctorate: Number(row.Doctorate),
+          TotalLaborForce: Number(row.TotalLaborForce),
+          CivEMP: Number(row.InLaborForceCivEmployed),
+          CivUNEMP: Number(row.InLaborForceCivUnemployed),
+          ArmyEMP: Number(row.InLaborForceArmedForces),
+          NotInForce: Number(row.NotInLaborLorce),
+          Total_Insured: Number(row.TotalAbove19Insurance),
+          F19To34: Number(row.F19to34Years),
+          F19To34Single: Number(row.F19to34YearsWithOneInsurance),
+          F19To34Dual: Number(row.F19to34YearsWithTwoPlusInsurance),
+          F19To34None: Number(row.F19to34YearsWithNoInsurance),
+          F35To64: Number(row.F35to64Years),
+          F35To64Single: Number(row.F35to64YearsWithOneInsurance),
+          F35To64Dual: Number(row.F35to64YearsWithTwoPlusInsurance),
+          F35To64None: Number(row.F35to64YearsWithNoInsurance),
+          F65Up: Number(row.F65Up),
+          F65UpSingle: Number(row.F65UpWithOneInsurance),
+          F65UpDual: Number(row.F65UpWithTwoPlusInsurance),
+          F65UpNone: Number(row.F65UpWithNoInsurance),
+        };
+      });
 
-export async function loadNHGISCsv(): Promise<State[]> {
-  try {
-    const csvUrl = "./NHGIS_STATE_DATA.csv";
-    const data = await d3.csv(csvUrl, (row) => {
-      return {
-        StateCode: Number(row.StateCode),
-        StateAbv: row.StateAbbrev?.trim() || "",
-        StateName: row.StateName?.trim() || "",
-        TotalSchool: Number(row.TotalSchooling) || 0,
-        NoSchool: Number(row.NoSchooling) || 0,
-        ElemSchool: Number(row.ElemSchool) || 0,
-        MidSchool: Number(row.MidSchool) || 0,
-        SomeHigh: Number(row.SomeHigh) || 0,
-        DiplomaGED: Number(row.HighSchoolDiplomaGED) || 0,
-        SomeColl: Number(row.SomeCollege) || 0,
-        Assoc: Number(row.Associates) || 0,
-        Bach: Number(row.Bachelors) || 0,
-        Masters: Number(row.ProfessionalMaster) || 0,
-        Doctorate: Number(row.Doctorate) || 0,
-        TotalLaborForce: Number(row.TotalLaborForce) || 0,
-        CivEMP: Number(row.InLaborForceCivEmployed) || 0,
-        CivUNEMP: Number(row.InLaborForceCivUnemployed) || 0,
-        ArmyEMP: Number(row.InLaborForceArmedForces) || 0,
-        NotInForce: Number(row.NotInLaborLorce) || 0,
-        Total_Insured: Number(row.TotalAbove19Insurance) || 0,
-        F19To34: Number(row.F19to34Years) || 0,
-        F19To34Single: Number(row.F19to34YearsWithOneInsurance) || 0,
-        F19To34Dual: Number(row.F19to34YearsWithTwoPlusInsurance) || 0,
-        F19To34None: Number(row.F19to34YearsWithNoInsurance) || 0,
-        F35To64: Number(row.F35to64Years) || 0,
-        F35To64Single: Number(row.F35to64YearsWithOneInsurance) || 0,
-        F35To64Dual: Number(row.F35to64YearsWithTwoPlusInsurance) || 0,
-        F35To64None: Number(row.F35to64YearsWithNoInsurance) || 0,
-        F65Up: Number(row.F65Up) || 0,
-        F65UpSingle: Number(row.F65UpWithOneInsurance) || 0,
-        F65UpDual: Number(row.F65UpWithTwoPlusInsurance) || 0,
-        F65UpNone: Number(row.F65UpWithNoInsurance) || 0,
-      };
-    });
-    console.log("Loaded NHGIS Data:", data);
-    return data;
-  } catch (error) {
-    console.error("Error loading NHGIS CSV:", error);
-    return [];
+      console.log("Loaded state data Data:", data);
+    } catch (error) {
+      console.error("Error loading state data CSV:", error);
+    }
   }
-}
