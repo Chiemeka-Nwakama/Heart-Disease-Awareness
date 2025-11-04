@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as d3 from "d3";
   import { onMount } from "svelte";
-  import type { Person, State, Mortality, Income } from "../types";
+  import type { Person, StateData } from "../types";
   import type {Top5} from  "../types";
   //import Bar from "../lib/Bar.svelte";
   import LineChart from "../lib/LineChart.svelte";
@@ -12,10 +12,8 @@
 
   // Reactive variable for storing the data
   let people: Person[] = [];
-  let state: State[] = []
+  let stateData: StateData[] = []
   let cause_Of_Death: Top5[] = [];
-  let mortalityRate: Mortality[] = [];
-  let income: Income[] = [];
   // Function to loads in the top 5 death in USA 2017 - 2022
   async function loadtop5Csv() {
     try {
@@ -47,54 +45,7 @@
   }
   // Call the loader when the component mounts
   onMount(loadtop5Csv);
-  
-  async function loadIncomeCSV() {
-    try {
-      const csvUrl = "./Income.csv";
-      income = await d3.csv(csvUrl, (row) => {
-        // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
-        return {
 
-         
-          State: row.State.trim(),
-          Median2022:   Number(row.Median2022),
-          Error2022:    Number(row.Error2022),
-          Median202224: Number(row.Median202224),
-          Error202224:  Number(row.Error202224),         
-        
-          // ...row, // spread syntax to copy all properties from row
-          // num_votes: Number(row.num_votes),
-          // year: new Date(row.year),
-          // please also format the values for other non-string attributes. You can check the attributes in the CSV file
-        };
-      });
-
-      console.log("Loaded Income Data:", income);
-    } catch (error) {
-      console.error("Error loading Income CSV:", error);
-    }
-  }
-
-  onMount(loadIncomeCSV)
-  async function loadMortality() {
-    try {
-      const csvUrl = "./mortality.csv";
-      mortalityRate = await d3.csv(csvUrl, (row) => {
-        // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
-        return {
-         
-          State: row.STATE.trim(), // As is
-          Rate: Number(row.RATE),
-          Deaths: Number(row.DEATHS),
-        };
-      });
-
-      console.log("Loaded Mortality CSV Data:", mortalityRate);
-    } catch (error) {
-      console.error("Error loading Mortality CSV:", error);
-    }
-  }
-  onMount(loadMortality);
   // Function to loads in the Kaggle CSV
   async function loadKaggleCsv() {
     try {
@@ -137,14 +88,20 @@
     }
   }
   onMount(loadKaggleCsv);
-  async function loadNHGISCsv() {
+  async function loadStateData() {
     try {
-      const csvUrl = "./NHGIS_STATE_DATA.csv";
-      state = await d3.csv(csvUrl, (row) => {
+      const csvUrl = "./State_Data.csv";
+      stateData = await d3.csv(csvUrl, (row) => {
         // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
         return {
           StateCode: Number(row.StateCode),
           StateAbv: row.StateAbbrev.trim(),
+          IncMedian2022: Number(row.Median2022),
+          IncError2022: Number(row.Error2022),
+          IncMedian202224: Number(row.Median202224),
+          IncError202224: Number(row.Error202224), 
+          MortalityRate: Number(row.RATE),
+          DeathCount: Number(row.DEATHS),
           StateName: row.StateName.trim(),
           TotalSchool: Number(row.TotalSchooling),
           NoSchool: Number(row.NoSchooling),
@@ -175,31 +132,22 @@
           F65UpSingle: Number(row.F65UpWithOneInsurance),
           F65UpDual: Number(row.F65UpWithTwoPlusInsurance),
           F65UpNone: Number(row.F65UpWithNoInsurance),
-
-          // ...row, // spread syntax to copy all properties from row
-          // num_votes: Number(row.num_votes),
-          // year: new Date(row.year),
-          // please also format the values for other non-string attributes. You can check the attributes in the CSV file
         };
       });
 
-      console.log("Loaded NHGIS Data:", state);
+      console.log("Loaded state data Data:", stateData);
     } catch (error) {
-      console.error("Error loading NHGIS CSV:", error);
+      console.error("Error loading state data CSV:", error);
     }
   }
   // Call the loader when the component mounts
-  onMount(loadNHGISCsv);
+  onMount(loadStateData);
 </script>
 
 <h1>WHAT SHAPES OUR HEARTS?</h1>
 
 <p>Here are {people.length == 0 ? "..." : people.length + " "} [people]</p>
-<p>Here are {state.length == 0 ? "..." : state.length + " "} [state]</p>
-<p>Here are {mortalityRate.length == 0 ? "..." : mortalityRate.length + " "} [mortality]</p>
-
-<p>Here are {income.length == 0 ? "..." : income.length + " "} [income]</p>
-
+<p>Here are {stateData.length == 0 ? "..." : stateData.length + " "} [stateData]</p>
 
 <p>Here are {cause_Of_Death.length == 0 ? "..." : cause_Of_Death.length + " "} [cause_Of_Death]</p>
 

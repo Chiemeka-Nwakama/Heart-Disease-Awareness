@@ -32,9 +32,15 @@ export type Top5 = {
    
 }
 
-export type State = {
+export type StateData = {
     StateCode: number;
     StateAbv: string;
+    IncMedian2022: number;
+    IncError2022: number;
+    IncMedian202224: number;
+    IncError202224: number;
+    MortalityRate: number;
+    DeathCount: number;
     StateName: string;
     TotalSchool: number;
     NoSchool: number;
@@ -65,18 +71,4 @@ export type State = {
     F65UpSingle: number;
     F65UpDual: number;
     F65UpNone: number;
-}
-
-export type Mortality = {
-    State: string;
-    Rate: number;
-    Deaths: number;
-}
-
-export type Income = {
-    State: string;
-    Median2022: number;
-    Error2022: number;
-    Median202224: number;
-    Error202224: number;
 }
