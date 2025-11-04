@@ -19,3 +19,16 @@ export type Person = {
     HeightInMeters: number; //height in meters
 
 }
+
+export type Top5 = {
+  
+    Causes: string; // cause of death - in descending order
+    All: number; //all years
+    2017: number; // 2017
+    2018: number;  //2018
+    2019: number; // 2019
+    2020: number;  // 2020
+    2021: number; // 2021
+    2022: number; //2022         
+   
+}

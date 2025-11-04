@@ -2,8 +2,9 @@
   import * as d3 from "d3";
   import { onMount } from "svelte";
   import type { Person } from "../types";
+  import type {Top5} from  "../types";
   //import Bar from "../lib/Bar.svelte";
-  //import LineChart from "../lib/LineChart.svelte";
+  import LineChart from "../lib/LineChart.svelte";
   //import CorrelationMatrix from "../lib/CorrelationMatrix.svelte";
 
 
@@ -11,6 +12,42 @@
 
   // Reactive variable for storing the data
   let people: Person[] = [];
+
+  let cause_Of_Death: Top5[] = [];
+
+  // Function to loads in the top 5 death in USA 2017 - 2022
+  async function loadtop5Csv() {
+    try {
+      const csvUrl = "./Cause_of_death_2017-2022.csv";
+      cause_Of_Death = await d3.csv(csvUrl, (row) => {
+        // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
+        return {
+
+         
+          Causes: (row["Cause"].slice(1)).trim(), // causes of death
+          All:  Number(row["All"].slice(1)), //all years
+          2017: Number(row["2017"].slice(1)), //2017
+          2018: Number(row["2018"].slice(1)), //2018
+          2019: Number(row["2019"].slice(1)), //2019
+          2020: Number(row["2020"].slice(1)), //2020      
+          2021: Number(row["2021"].slice(1)), //2021  
+          2022: Number(row["2022"].slice(1)), //2022              
+        
+          // ...row, // spread syntax to copy all properties from row
+          // num_votes: Number(row.num_votes),
+          // year: new Date(row.year),
+          // please also format the values for other non-string attributes. You can check the attributes in the CSV file
+        };
+      });
+
+      console.log("Loaded CSV Top 5 Data:", cause_Of_Death);
+    } catch (error) {
+      console.error("Error loading Top 5 CSV:", error);
+    }
+  }
+  // Call the loader when the component mounts
+  onMount(loadtop5Csv);
+
 
   // Function to loads in the Kaggle CSV
   async function loadKaggleCsv() {
@@ -48,9 +85,9 @@
         };
       });
 
-      console.log("Loaded CSV Data:", people);
+      console.log("Loaded Kaggle CSV Data:", people);
     } catch (error) {
-      console.error("Error loading CSV:", error);
+      console.error("Error loading Kaggle CSV:", error);
     }
   }
   // Call the loader when the component mounts

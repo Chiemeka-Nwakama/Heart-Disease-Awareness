@@ -1,6 +1,6 @@
 <script lang="ts">
   import { scale } from "svelte/transition";
-  import type { TMovie } from "../types";
+  import type { Top5 } from "../types";
   import * as d3 from "d3";
 
   // define the props of the LineChart component
