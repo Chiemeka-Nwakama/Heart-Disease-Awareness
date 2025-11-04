@@ -59,9 +59,9 @@
 
 <h1>WHAT SHAPES OUR HEARTS?</h1>
 
-<p>Here are {movies.length == 0 ? "..." : movies.length + " "} movies</p>
+<p>Here are {people.length == 0 ? "..." : people.length + " "} [people]</p>
 <!-- <Bar {movies} /> -->
-<Bar {movies} width={600} height={400} />
+<!--<Bar {movies} width={600} height={400} />-->
 
 
 
