@@ -10,7 +10,7 @@
   //In completing this assignment, I utilized ChatGPT for helping in assistance with the code for my line chart and correlation matrix implementations. 
 
   // Reactive variable for storing the data
-  let movies: TMovie[] = [];
+  let people: People[] = [];
 
   // Function to loads in the Kaggle CSV
   async function loadKaggleCsv() {
