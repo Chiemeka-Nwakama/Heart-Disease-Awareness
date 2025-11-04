@@ -2,6 +2,8 @@
   import { onMount } from "svelte";
   import type { Person, StateData, Top5 } from "../types";
   import { loadTop5Csv, loadKaggleCsv, loadStateData } from "../dataLoaders";
+  import LineChartDeath from "../lib/LineChartDeath.svelte";
+
   import '../app.css';
   // Reactive variable for storing the data
   let people: Person[] = [];
