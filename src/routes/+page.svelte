@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as d3 from "d3";
   import { onMount } from "svelte";
-  import type { TMovie } from "../types";
+  import type { People } from "../types";
   import Bar from "../lib/Bar.svelte";
   import LineChart from "../lib/LineChart.svelte";
   import CorrelationMatrix from "../lib/CorrelationMatrix.svelte";
