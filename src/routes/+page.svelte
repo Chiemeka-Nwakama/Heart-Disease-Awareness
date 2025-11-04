@@ -90,9 +90,9 @@
     }
   }
   onMount(loadKaggleCsv);
-  async function loadNGHISCsv() {
+  async function loadNHGISCsv() {
     try {
-      const csvUrl = "./NGHIS_STATE_DATA.csv";
+      const csvUrl = "./NHGIS_STATE_DATA.csv";
       people = await d3.csv(csvUrl, (row) => {
         // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
         return {
@@ -142,7 +142,7 @@
     }
   }
   // Call the loader when the component mounts
-  onMount(loadNGHISCsv);
+  onMount(loadNHGISCsv);
 </script>
 
 <h1>WHAT SHAPES OUR HEARTS?</h1>
