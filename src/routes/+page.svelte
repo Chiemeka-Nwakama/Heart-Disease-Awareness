@@ -67,9 +67,10 @@
 
 
 <!-- put final graph here for Q1-->
-<LineChart {movies} width={1200} height={400} />
+
+<!--<LineChart {movies} width={1200} height={400} />-->
 
 
-<CorrelationMatrix {movies} width={1200} height={800} />
 
-<!-- put final graph here for Q2-->
+
+<!--<CorrelationMatrix {movies} width={1200} height={800} />-->
