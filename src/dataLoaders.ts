@@ -102,7 +102,8 @@ export async function loadStateData(): Promise<StateData[]>  {
         };
       });
 
-      console.log("Loaded state data Data:", data);
+      console.log("Loaded state Data:", data);
+      return data;
     } catch (error) {
       console.error("Error loading state data CSV:", error);
     }
