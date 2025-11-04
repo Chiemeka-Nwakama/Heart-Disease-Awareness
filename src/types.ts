@@ -20,6 +20,19 @@ export type Person = {
 
 }
 
+export type Top5 = {
+  
+    Causes: string; // cause of death - in descending order
+    2017: number; // 2017
+    2018: number;  //2018
+    2019: number; // 2019
+    2020: number;  // 2020
+    2021: number; // 2021
+    2022: number; //2022         
+   
+}
+
+
 export type State = {
     StateCode: number;
     StateAbv: string;
