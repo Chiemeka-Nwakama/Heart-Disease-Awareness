@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #e4e4e7;
+    background-color: #0a0a0b;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 60px 0 1px;
+    position: relative;
+}
+
+h1 {
+    font-size: 3em;
+    font-weight: 700;
+    color: #ff6b6b;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+    position: relative;
+    z-index: 2;
+}
+
+.subtitle {
+    font-size: 1.3em;
+    color: #a1a1aa;
+    margin-bottom: 15px;
+}
+
+section {
+    background: #18181b;
+    padding: 40px;
+    margin: 30px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    border: 1px solid #27272a;
+}
+
+h2 {
+    font-size: 2em;
+    color: #ff6b6b;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 1.5em;
+    color: #d4d4d8;
+    margin: 30px 0 15px;
+}
+
+p {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    color: #a1a1aa;
+}
+
+.viz-placeholder {
+    background: linear-gradient(135deg, #27272a 0%, #1c1c1f 100%);
+    border: 2px dashed #ff6b6b;
+    border-radius: 8px;
+    padding: 60px 40px;
+    margin: 30px 0;
+    text-align: center;
+}
+
+.viz-placeholder h4 {
+    font-size: 1.3em;
+    color: #ff6b6b;
+    margin-bottom: 10px;
+}
+
+.viz-placeholder p {
+    color: #a1a1aa;
+    font-size: 1em;
+    margin: 0;
+}
+
+.person-card {
+    background: #292524;
+    border-left: 4px solid #fb923c;
+    padding: 25px;
+    margin: 25px 0;
+    border-radius: 4px;
+}
+
+.person-card h4 {
+    font-size: 1.3em;
+    color: #fb923c;
+    margin-bottom: 10px;
+}
+
+.person-card .details {
+    font-size: 1em;
+    color: #d4d4d8;
+    line-height: 1.8;
+}
+
+.person-card .details p {
+    color: #d4d4d8;
+}
+
+.key-findings {
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 8px;
+    margin: 30px 0;
+    border: 1px solid #334155;
+}
+
+.key-findings h3 {
+    color: #60a5fa;
+    margin-top: 0;
+}
+
+.key-findings ol {
+    margin-left: 20px;
+    font-size: 1.1em;
+    color: #cbd5e1;
+}
+
+.key-findings li {
+    margin: 15px 0;
+}
+
+footer {
+    text-align: center;
+    padding: 40px 0;
+    color: #71717a;
+    font-size: 0.9em;
+}

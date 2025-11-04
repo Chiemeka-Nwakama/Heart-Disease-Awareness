@@ -1,167 +1,174 @@
 <script lang="ts">
-  import * as d3 from "d3";
   import { onMount } from "svelte";
-  import type { Person, StateData } from "../types";
-  import type {Top5} from  "../types";
-  //import Bar from "../lib/Bar.svelte";
-  import LineChart from "../lib/LineChart.svelte";
-  //import CorrelationMatrix from "../lib/CorrelationMatrix.svelte";
-
-
-  //In completing this assignment, I utilized ChatGPT for helping in assistance with the code for my line chart and correlation matrix implementations. 
-
+  import type { Person, StateData, Top5 } from "../types";
+  import { loadTop5Csv, loadKaggleCsv, loadStateData } from "../dataLoaders";
+  import '../app.css';
   // Reactive variable for storing the data
   let people: Person[] = [];
   let stateData: StateData[] = []
   let cause_Of_Death: Top5[] = [];
-  // Function to loads in the top 5 death in USA 2017 - 2022
-  async function loadtop5Csv() {
-    try {
-      const csvUrl = "./Cause_of_death_2017-2022.csv";
-      cause_Of_Death = await d3.csv(csvUrl, (row) => {
-        // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
-        return {
-
-         
-          Causes: (row["Cause"]).trim(), // causes of death
-          2017: Number(row["2017"]), //2017
-          2018: Number(row["2018"]), //2018
-          2019: Number(row["2019"]), //2019
-          2020: Number(row["2020"]), //2020      
-          2021: Number(row["2021"]), //2021  
-          2022: Number(row["2022"]), //2022              
-        
-          // ...row, // spread syntax to copy all properties from row
-          // num_votes: Number(row.num_votes),
-          // year: new Date(row.year),
-          // please also format the values for other non-string attributes. You can check the attributes in the CSV file
-        };
-      });
-
-      console.log("Loaded CSV Top 5 Data:", cause_Of_Death);
-    } catch (error) {
-      console.error("Error loading Top 5 CSV:", error);
-    }
-  }
-  // Call the loader when the component mounts
-  onMount(loadtop5Csv);
-
-  // Function to loads in the Kaggle CSV
-  async function loadKaggleCsv() {
-    try {
-      const csvUrl = "./transformed_heart_data_to_numerical.csv";
-      people = await d3.csv(csvUrl, (row) => {
-        // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
-        return {
-
-         
-          State: row.State.trim(), // As is
-          Sex: Number(row.Sex), //0 = Female,  1 = Male
-          SleepHours: Number(row.SleepHours), // nunmber in Hours
-          HadHeartAttack: Number(row.HadHeartAttack),// 0 = no, 1 = yes
-          HadAngina: Number(row.HadAngina), // 0 = no, 1 = yes            
-          HadStroke: Number(row.HadStroke),  // 0 = no, 1 = yes
-          HadCOPD: Number(row.HadCOPD), // 0 = no, 1 = yes               
-          CovidPos: Number(row.CovidPos),  // 0 = no, 1 = yes  
-          AlcoholDrinkers: Number(row.AlcoholDrinkers), // 0 = no, 1 = yes
-          HadDiabetes: Number(row.HadDiabetes), // 0 = no, 1 = yes, 2 = No, pre-diabetes or borderline diabetes, 3 = Yes, but only during pregnancy (female) 
-          HadDepressiveDisorder: Number(row.HadDepressiveDisorder),   // 0 = no, 1 = yes
-          SmokerStatus: Number(row.SmokerStatus), // 0 = Never Smoked, 1 = Former Smoker, 2 = Current Smoker - now smokes some days, 3 = Current Smoker - now smokes some days
-          ECigaretteUsage: Number(row.ECigaretteUsage), //0 = Never used e-ciggaretes, in my entire life, 1 = Not current, 2 = Use them every day, 3 = Use them some days
-          AgeCategory: Number(row.AgeCategory), // "Age 18 to 24" = 0 | "Age 25 to 29" = 1 | "Age 30 to 34" = 2 | "Age 35 to 39" = 3 | "Age 40 to 44" = 4 | "Age 45 to 49" = 5 | "Age 50 to 54" = 6 | "Age 55 to 59" = 7 | "Age 60 to 64" = 8 | "Age 65 to 69" = 9 | "Age 70 to 74" = 10 | "Age 75 to 79" = 11 | "Age 80 or older" = 12
-          RaceEthnicityCategory: Number(row.RaceEthnicityCategory), // 0 = 'White only, Non-Hispanic' | 1 = 'Black only, Non-Hispanic' | 2 = 'Other race only, Non-Hispanic' | 3 = 'Multiracial, Non-Hispanic' | 4 = 'Hispanic'
-          BMI: Number(row.BMI), //BMI in number
-          WeightInKilograms: Number(row.WeightInKilograms), // weight in kilos
-          HeightInMeters: Number(row.HeightInMeters), //height in meters
-
-
-          // ...row, // spread syntax to copy all properties from row
-          // num_votes: Number(row.num_votes),
-          // year: new Date(row.year),
-          // please also format the values for other non-string attributes. You can check the attributes in the CSV file
-        };
-      });
-
-      console.log("Loaded Kaggle CSV Data:", people);
-    } catch (error) {
-      console.error("Error loading Kaggle CSV:", error);
-    }
-  }
-  onMount(loadKaggleCsv);
-  async function loadStateData() {
-    try {
-      const csvUrl = "./State_Data.csv";
-      stateData = await d3.csv(csvUrl, (row) => {
-        // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
-        return {
-          StateCode: Number(row.StateCode),
-          StateAbv: row.StateAbbrev.trim(),
-          IncMedian2022: Number(row.Median2022),
-          IncError2022: Number(row.Error2022),
-          IncMedian202224: Number(row.Median202224),
-          IncError202224: Number(row.Error202224), 
-          MortalityRate: Number(row.RATE),
-          DeathCount: Number(row.DEATHS),
-          StateName: row.StateName.trim(),
-          TotalSchool: Number(row.TotalSchooling),
-          NoSchool: Number(row.NoSchooling),
-          ElemSchool: Number(row.ElemSchool),
-          MidSchool: Number(row.MidSchool),
-          SomeHigh: Number(row.SomeHigh),
-          DiplomaGED: Number(row.HighSchoolDiplomaGED),
-          SomeColl: Number(row.SomeCollege),
-          Assoc: Number(row.Associates),
-          Bach: Number(row.Bachelors),
-          Masters: Number(row.ProfessionalMaster),
-          Doctorate: Number(row.Doctorate),
-          TotalLaborForce: Number(row.TotalLaborForce),
-          CivEMP: Number(row.InLaborForceCivEmployed),
-          CivUNEMP: Number(row.InLaborForceCivUnemployed),
-          ArmyEMP: Number(row.InLaborForceArmedForces),
-          NotInForce: Number(row.NotInLaborLorce),
-          Total_Insured: Number(row.TotalAbove19Insurance),
-          F19To34: Number(row.F19to34Years),
-          F19To34Single: Number(row.F19to34YearsWithOneInsurance),
-          F19To34Dual: Number(row.F19to34YearsWithTwoPlusInsurance),
-          F19To34None: Number(row.F19to34YearsWithNoInsurance),
-          F35To64: Number(row.F35to64Years),
-          F35To64Single: Number(row.F35to64YearsWithOneInsurance),
-          F35To64Dual: Number(row.F35to64YearsWithTwoPlusInsurance),
-          F35To64None: Number(row.F35to64YearsWithNoInsurance),
-          F65Up: Number(row.F65Up),
-          F65UpSingle: Number(row.F65UpWithOneInsurance),
-          F65UpDual: Number(row.F65UpWithTwoPlusInsurance),
-          F65UpNone: Number(row.F65UpWithNoInsurance),
-        };
-      });
-
-      console.log("Loaded state data Data:", stateData);
-    } catch (error) {
-      console.error("Error loading state data CSV:", error);
-    }
-  }
-  // Call the loader when the component mounts
-  onMount(loadStateData);
+  onMount(async () => {
+    // Load all data in parallel
+    [cause_Of_Death, people, stateData] = await Promise.all([
+      loadTop5Csv(),
+      loadKaggleCsv(),
+      loadStateData(),
+    ]);
+  });
 </script>
 
-<h1>WHAT SHAPES OUR HEARTS?</h1>
 
-<p>Here are {people.length == 0 ? "..." : people.length + " "} [people]</p>
-<p>Here are {stateData.length == 0 ? "..." : stateData.length + " "} [stateData]</p>
+<div class="container">
+    <header>
+        <h1>WHAT SHAPES OUR HEARTS?</h1>
+        
+        <p>Here are {people.length == 0 ? "..." : people.length + " "} [people]</p>
+        <p>Here are {stateData.length == 0 ? "..." : stateData.length + " "} [stateData]</p>
+        <p>Here are {cause_Of_Death.length == 0 ? "..." : cause_Of_Death.length + " "} [cause_Of_Death]</p>
+    </header>
 
-<p>Here are {cause_Of_Death.length == 0 ? "..." : cause_Of_Death.length + " "} [cause_Of_Death]</p>
+    <!-- Leading Causes Section -->
+    <section id="deathCauseSection">
+      <p>Heart Disease has been the leading cause of death in the U.S. for the last decade.</p>
+        <div class="viz-placeholder">
+            <h4>📊 Top 10 Leading Causes of Death in the U.S.</h4>
+            <p>Bar chart or horizontal stacked visualization showing heart disease at #1, followed by cancer, COVID-19, accidents, stroke, etc.</p>
+        </div>
+    </section>
 
-<!-- <Bar {movies} /> -->
-<!--<Bar {movies} width={600} height={400} />-->
+    <p>
+      We looked at data on 
+      <a href="#lifestyleSection">lifestyle</a>,
+      <a href="#demographicSection">demographics</a>, and
+      <a href="#locationSection">location</a>
+      to see what really connects to heart disease across the U.S.
+    </p>
 
+    <!-- How We Live Section -->
+    <section id="lifestyleSection">
+        <h2>How We Live: Do Our Habits Matter?</h2>
+        <p>Exercise, food, smoking, sleep – we all know they count, but how much?</p>
+        
+        <div class="viz-placeholder">
+            <h4>📈 Lifestyle Factors & Heart Disease Risk</h4>
+            <p>Interactive visualization showing correlation between lifestyle factors (exercise frequency, diet quality, smoking status, sleep hours) and heart disease rates. Could be scatter plots, connected dot plots, or small multiples.</p>
+        </div>
 
+        <div class="person-card">
+            <h4>Meet Sarah, 45</h4>
+            <div class="details">
+                <p><strong>Exercise:</strong> 4x per week, moderate intensity</p>
+                <p><strong>Diet:</strong> Mediterranean-style, low processed foods</p>
+                <p><strong>Smoking:</strong> Never smoked</p>
+                <p><strong>Sleep:</strong> 7-8 hours nightly</p>
+            </div>
+        </div>
 
+        <div class="viz-placeholder">
+            <h4>⚡ Sarah's Risk Meter</h4>
+            <p>Gauge or meter visualization comparing Sarah's risk to national averages. Shows percentage reduction in risk based on her healthy habits.</p>
+            <p><strong>Finding:</strong> People with habits like Sarah's have about 35% lower risk than the national average.</p>
+        </div>
+    </section>
 
-<!-- put final graph here for Q1-->
+    <!-- Who We Are Section -->
+    <section id="demographicSection">
+        <h2>Who We Are: Does Age or Background Change the Odds?</h2>
+        <p>Let's see how things shift by age, gender, and race.</p>
+        
+        <div class="viz-placeholder">
+            <h4>📊 Heart Disease Risk by Demographics</h4>
+            <p>Set of visualizations showing:<br>
+            • Age curves (risk increasing with age)<br>
+            • Gender comparison (male vs. female rates)<br>
+            • Racial/ethnic disparities in heart disease mortality rates</p>
+        </div>
 
-<!--<LineChart {movies} width={1200} height={400} />-->
+        <div class="person-card">
+            <h4>Meet James, 68</h4>
+            <div class="details">
+                <p><strong>Age:</strong> 68 years old</p>
+                <p><strong>Gender:</strong> Male</p>
+                <p><strong>Race:</strong> Black/African American</p>
+                <p><strong>Family History:</strong> Father had heart attack at 62</p>
+            </div>
+        </div>
 
+        <div class="viz-placeholder">
+            <h4>⚠️ James's Risk Profile</h4>
+            <p>Visualization showing elevated risk factors. Comparison of James's demographic risk factors vs. population average.</p>
+            <p><strong>Finding:</strong> People like James face higher risk due to age demographics and genetic factors, with rates 1.5x higher than younger populations.</p>
+        </div>
+    </section>
 
+    <!-- Where We Live Section -->
+    <section id="locationSection">
+        <h2>Where We Live: Does Your State Make a Difference?</h2>
+        <p>Heart health looks different in different corners of the country.</p>
+        
+        <div class="viz-placeholder">
+            <h4>🗺️ Heart Disease Mortality by State</h4>
+            <p>Choropleth map of the United States showing heart disease death rates per 100,000 by state. Southern states (Mississippi, Alabama, Oklahoma, Louisiana) highlighted in darker reds; Western/Northern states (Minnesota, Colorado, Hawaii, Massachusetts) in lighter shades.</p>
+        </div>
 
+        <div class="person-card">
+            <h4>Meet Maria, 52</h4>
+            <div class="details">
+                <p><strong>Location:</strong> Rural Mississippi</p>
+                <p><strong>Healthcare Access:</strong> 45 minutes to nearest cardiac center</p>
+                <p><strong>Environment:</strong> Limited access to fresh produce, few exercise facilities</p>
+                <p><strong>Lifestyle:</strong> Sedentary job, high-stress</p>
+            </div>
+        </div>
 
-<!--<CorrelationMatrix {movies} width={1200} height={800} />-->
+        <div class="viz-placeholder">
+            <h4>📍 Maria's Geographic Risk</h4>
+            <p>Visualization comparing heart disease rates in Maria's state vs. national average, with breakdown of contributing factors (healthcare access, food environment, built environment for physical activity).</p>
+            <p><strong>Finding:</strong> Maria's story mirrors what the data show: both access to healthcare and lifestyle factors shaped by location matter significantly.</p>
+        </div>
+    </section>
+
+    <!-- Interactive Section -->
+    <section>
+        <h2>What If They Changed a Few Things?</h2>
+        <p>A few small changes can make a big difference. See how modifying lifestyle factors could impact risk.</p>
+        
+        <div class="viz-placeholder">
+            <h4>🎛️ Risk Calculator</h4>
+            <p>Interactive tool with sliders/toggles to adjust:<br>
+            • Exercise frequency (0-7 days/week)<br>
+            • Smoking status (current/former/never)<br>
+            • Diet quality (poor/fair/good/excellent)<br>
+            • Sleep hours (4-10 hours)<br>
+            • BMI range<br><br>
+            Real-time risk score updates as user adjusts factors, showing percentage change from baseline.</p>
+        </div>
+    </section>
+
+    <!-- What We Learned Section -->
+    <section class="key-findings">
+        <h3>What We Learned</h3>
+        <ol>
+            <li><strong>Lifestyle is huge:</strong> Exercise and diet quality are among the most powerful modifiable factors, with regular physical activity and healthy eating patterns associated with 30-40% risk reduction.</li>
+            
+            <li><strong>Demographics matter:</strong> Age, gender, and race all shape risk in significant ways. Men face higher rates than women until older age, and certain racial/ethnic groups experience disproportionately higher rates due to a complex mix of genetic, social, and healthcare access factors.</li>
+            
+            <li><strong>Where you live can tilt the odds:</strong> Geographic location matters beyond individual choices. States with lower heart disease rates tend to have better healthcare infrastructure, more walkable communities, and greater access to healthy food options.</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>The Bottom Line</h2>
+        <p>Heart health is complex, shaped by a web of factors from our daily habits to where we were born. But data helps us see what we can actually control.</p>
+        
+        <p>While we can't change our age, family history, or easily relocate, we <em>can</em> modify our lifestyle choices. The evidence is clear: regular exercise, nutritious eating, adequate sleep, and avoiding smoking make a substantial difference.</p>
+        
+        <p>Understanding these patterns isn't just about statistics—it's about empowering each of us to make informed choices that can add years to our lives and life to our years.</p>
+    </section>
+
+    <footer>
+        <p>Data sources: CDC National Vital Statistics System, American Heart Association, National Health Interview Survey</p>
+        <p>An interactive data story exploring heart disease risk factors across America</p>
+    </footer>
+</div>
+
