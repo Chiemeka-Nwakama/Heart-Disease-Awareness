@@ -93,7 +93,7 @@
   async function loadNHGISCsv() {
     try {
       const csvUrl = "./NHGIS_STATE_DATA.csv";
-      people = await d3.csv(csvUrl, (row) => {
+      state = await d3.csv(csvUrl, (row) => {
         // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
         return {
           StateCode: Number(row.StateCode),
@@ -136,9 +136,9 @@
         };
       });
 
-      console.log("Loaded CSV Data:", state);
+      console.log("Loaded NHGIS Data:", state);
     } catch (error) {
-      console.error("Error loading Kaggle CSV:", error);
+      console.error("Error loading NHGIS CSV:", error);
     }
   }
   // Call the loader when the component mounts
