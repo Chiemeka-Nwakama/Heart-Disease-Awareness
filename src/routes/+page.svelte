@@ -141,58 +141,6 @@
       console.error("Error loading Kaggle CSV:", error);
     }
   }
-
-  async function loadNGHISCsv() {
-    try {
-      const csvUrl = "NGHIS_STATE_DATA.csv";
-      people = await d3.csv(csvUrl, (row) => {
-        // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
-        return {
-          StateCode: Number(row.StateCode),
-          StateAbv: row.StateAbbrev.trim(),
-          StateName: row.StateName.trim(),
-          TotalSchool: Number(row.TotalSchooling),
-          NoSchool: Number(row.NoSchooling),
-          ElemSchool: Number(row.ElemSchool),
-          MidSchool: Number(row.MidSchool),
-          SomeHigh: Number(row.SomeHigh),
-          DiplomaGED: Number(row.HighSchoolDiplomaGED),
-          SomeColl: Number(row.SomeCollege),
-          Assoc: Number(row.Associates),
-          Bach: Number(row.Bachelors),
-          Masters: Number(row.ProfessionalMaster),
-          Doctorate: Number(row.Doctorate),
-          TotalLaborForce: Number(row.TotalLaborForce),
-          CivEMP: Number(row.InLaborForceCivEmployed),
-          CivUNEMP: Number(row.InLaborForceCivUnemployed),
-          ArmyEMP: Number(row.InLaborForceArmedForces),
-          NotInForce: Number(row.NotInLaborLorce),
-          Total_Insured: Number(row.TotalAbove19Insurance),
-          F19To34: Number(row.F19to34Years),
-          F19To34Single: Number(row.F19to34YearsWithOneInsurance),
-          F19To34Dual: Number(row.F19to34YearsWithTwoPlusInsurance),
-          F19To34None: Number(row.F19to34YearsWithNoInsurance),
-          F35To64: Number(row.F35to64Years),
-          F35To64Single: Number(row.F35to64YearsWithOneInsurance),
-          F35To64Dual: Number(row.F35to64YearsWithTwoPlusInsurance),
-          F35To64None: Number(row.F35to64YearsWithNoInsurance),
-          F65Up: Number(row.F65Up),
-          F65UpSingle: Number(row.F65UpWithOneInsurance),
-          F65UpDual: Number(row.F65UpWithTwoPlusInsurance),
-          F65UpNone: Number(row.F65UpWithNoInsurance),
-
-          // ...row, // spread syntax to copy all properties from row
-          // num_votes: Number(row.num_votes),
-          // year: new Date(row.year),
-          // please also format the values for other non-string attributes. You can check the attributes in the CSV file
-        };
-      });
-
-      console.log("Loaded CSV Data:", state);
-    } catch (error) {
-      console.error("Error loading CSV:", error);
-    }
-  }
   // Call the loader when the component mounts
   onMount(loadNGHISCsv);
 </script>
