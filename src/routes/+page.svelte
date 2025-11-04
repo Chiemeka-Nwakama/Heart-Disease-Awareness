@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as d3 from "d3";
   import { onMount } from "svelte";
-  import type { Person, State, Mortality } from "../types";
+  import type { Person, State, Mortality, Income } from "../types";
   import type {Top5} from  "../types";
   //import Bar from "../lib/Bar.svelte";
   import LineChart from "../lib/LineChart.svelte";
@@ -15,6 +15,7 @@
   let state: State[] = []
   let cause_Of_Death: Top5[] = [];
   let mortalityRate: Mortality[] = [];
+  let income: Income[] = [];
   // Function to loads in the top 5 death in USA 2017 - 2022
   async function loadtop5Csv() {
     try {
@@ -46,7 +47,35 @@
   }
   // Call the loader when the component mounts
   onMount(loadtop5Csv);
+  
+  async function loadIncomeCSV() {
+    try {
+      const csvUrl = "./Income.csv";
+      income = await d3.csv(csvUrl, (row) => {
+        // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
+        return {
 
+         
+          State: row.State.trim(),
+          Median2022:   Number(row.Median2022),
+          Error2022:    Number(row.Error2022),
+          Median202224: Number(row.Median202224),
+          Error202224:  Number(row.Error202224),         
+        
+          // ...row, // spread syntax to copy all properties from row
+          // num_votes: Number(row.num_votes),
+          // year: new Date(row.year),
+          // please also format the values for other non-string attributes. You can check the attributes in the CSV file
+        };
+      });
+
+      console.log("Loaded Income Data:", income);
+    } catch (error) {
+      console.error("Error loading Income CSV:", error);
+    }
+  }
+
+  onMount(loadIncomeCSV)
   async function loadMortality() {
     try {
       const csvUrl = "./mortality.csv";
@@ -169,6 +198,7 @@
 <p>Here are {state.length == 0 ? "..." : state.length + " "} [state]</p>
 <p>Here are {mortalityRate.length == 0 ? "..." : mortalityRate.length + " "} [mortality]</p>
 
+<p>Here are {income.length == 0 ? "..." : income.length + " "} [income]</p>
 
 
 <p>Here are {cause_Of_Death.length == 0 ? "..." : cause_Of_Death.length + " "} [cause_Of_Death]</p>

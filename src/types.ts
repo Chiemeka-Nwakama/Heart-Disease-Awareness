@@ -72,3 +72,11 @@ export type Mortality = {
     Rate: number;
     Deaths: number;
 }
+
+export type Income = {
+    State: string;
+    Median2022: number;
+    Error2022: number;
+    Median202224: number;
+    Error202224: number;
+}
