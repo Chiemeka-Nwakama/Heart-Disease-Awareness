@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as d3 from "d3";
   import { onMount } from "svelte";
-  import type { Person, State } from "../types";
+  import type { Person, State, Mortality } from "../types";
   import type {Top5} from  "../types";
   //import Bar from "../lib/Bar.svelte";
   import LineChart from "../lib/LineChart.svelte";
@@ -14,7 +14,7 @@
   let people: Person[] = [];
   let state: State[] = []
   let cause_Of_Death: Top5[] = [];
-
+  let mortalityRate: Mortality[] = [];
   // Function to loads in the top 5 death in USA 2017 - 2022
   async function loadtop5Csv() {
     try {
@@ -47,7 +47,25 @@
   // Call the loader when the component mounts
   onMount(loadtop5Csv);
 
+  async function loadMortality() {
+    try {
+      const csvUrl = "./mortality.csv";
+      people = await d3.csv(csvUrl, (row) => {
+        // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
+        return {
+         
+          State: row.STATE.trim(), // As is
+          Rate: Number(row.RATE),
+          Deaths: Number(row.DEATHS),
+        };
+      });
 
+      console.log("Loaded Mortality CSV Data:", mortalityRate);
+    } catch (error) {
+      console.error("Error loading Mortality CSV:", error);
+    }
+  }
+  onMount(loadMortality);
   // Function to loads in the Kaggle CSV
   async function loadKaggleCsv() {
     try {
@@ -149,6 +167,7 @@
 
 <p>Here are {people.length == 0 ? "..." : people.length + " "} [people]</p>
 <p>Here are {state.length == 0 ? "..." : state.length + " "} [state]</p>
+<p>Here are {mortalityRate.length == 0 ? "..." : mortalityRate.length + " "} [mortality]</p>
 
 
 
