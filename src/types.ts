@@ -19,3 +19,38 @@ export type Person = {
     HeightInMeters: number; //height in meters
 
 }
+
+export type State = {
+    StateCode: number;
+    StateAbv: string;
+    StateName: string;
+    TotalSchool: number;
+    NoSchool: number;
+    ElemSchool: number;
+    MidSchool: number;
+    SomeHigh: number;
+    DiplomaGED: number;
+    SomeColl: number;
+    Assoc: number;
+    Bach: number;
+    Masters: number;
+    Doctorate: number;
+    TotalLaborForce: number;
+    CivEMP: number;
+    CivUNEMP: number;
+    ArmyEMP: number;
+    NotInForce: number;
+    Total_Insured: number;
+    F19To34: number;
+    F19To34Single: number;
+    F19To34Dual: number;
+    F19To34None: number;
+    F35To64: number;
+    F35To64Single: number;
+    F35To64Dual: number;
+    F35To64None: number;
+    F65Up: number;
+    F65UpSingle: number;
+    F65UpDual: number;
+    F65UpNone: number;
+}
