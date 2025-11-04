@@ -50,7 +50,7 @@
   async function loadMortality() {
     try {
       const csvUrl = "./mortality.csv";
-      people = await d3.csv(csvUrl, (row) => {
+      mortalityRate = await d3.csv(csvUrl, (row) => {
         // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
         return {
          
