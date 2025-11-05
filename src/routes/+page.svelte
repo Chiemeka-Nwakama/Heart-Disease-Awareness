@@ -4,6 +4,7 @@
   import { loadTop5Csv, loadKaggleCsv, loadStateData } from "../dataLoaders";
   import LineChartDeath from "../lib/LineChartDeath.svelte";
   import StateDataCorrelation from "../lib/USCorrelationMap.svelte";
+  import LifestyleFactors from "../lib/LifestyleFactors.svelte";
   
   import '../app.css';
     import USCorrelationMap from "../lib/USCorrelationMap.svelte";
@@ -53,6 +54,7 @@
         <p>Exercise, food, smoking, sleep – we all know they count, but how much?</p>
         
         <div class="viz-placeholder">
+            <LifestyleFactors data={people} />
             <h4>📈 Lifestyle Factors & Heart Disease Risk</h4>
             <p>Interactive visualization showing correlation between lifestyle factors (exercise frequency, diet quality, smoking status, sleep hours) and heart disease rates. Could be scatter plots, connected dot plots, or small multiples.</p>
         </div>
