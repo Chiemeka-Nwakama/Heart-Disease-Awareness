@@ -54,7 +54,6 @@
         <p>Exercise, food, smoking, sleep – we all know they count, but how much?</p>
         
         <div class="viz-placeholder">
-            <LifestyleFactors data={people} />
             <h4>📈 Lifestyle Factors & Heart Disease Risk</h4>
             <p>Interactive visualization showing correlation between lifestyle factors (exercise frequency, diet quality, smoking status, sleep hours) and heart disease rates. Could be scatter plots, connected dot plots, or small multiples.</p>
         </div>
@@ -87,7 +86,9 @@
             • Age curves (risk increasing with age)<br>
             • Gender comparison (male vs. female rates)<br>
             • Racial/ethnic disparities in heart disease mortality rates</p>
+            <LifestyleFactors data={people} />
         </div>
+        
 
         <div class="person-card">
             <h4>Meet James, 68</h4>
