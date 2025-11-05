@@ -114,7 +114,8 @@
         <div class="viz-placeholder">
             <h4>🗺️ Heart Disease Mortality by State</h4>
             <p>Choropleth map of the United States showing heart disease death rates per 100,000 by state. Southern states (Mississippi, Alabama, Oklahoma, Louisiana) highlighted in darker reds; Western/Northern states (Minnesota, Colorado, Hawaii, Massachusetts) in lighter shades.</p>
-        </div>
+            <USCorrelationMap data={stateData} />
+          </div>
 
         <div class="person-card">
             <h4>Meet Maria, 52</h4>
@@ -130,10 +131,6 @@
             <h4>📍 Maria's Geographic Risk</h4>
             <p>Visualization comparing heart disease rates in Maria's state vs. national average, with breakdown of contributing factors (healthcare access, food environment, built environment for physical activity).</p>
             <p><strong>Finding:</strong> Maria's story mirrors what the data show: both access to healthcare and lifestyle factors shaped by location matter significantly.</p>
-        </div>
-        <div class="viz-placeholder">
-          <h4>🗺️ Heart Disease Deaths by State</h4>
-          <USCorrelationMap data={stateData} />
         </div>
     </section>
 
