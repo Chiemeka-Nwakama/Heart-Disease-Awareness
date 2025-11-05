@@ -3,8 +3,10 @@
   import type { Person, StateData, Top5 } from "../types";
   import { loadTop5Csv, loadKaggleCsv, loadStateData } from "../dataLoaders";
   import LineChartDeath from "../lib/LineChartDeath.svelte";
-
+  import StateDataCorrelation from "../lib/USCorrelationMap.svelte";
+  
   import '../app.css';
+    import USCorrelationMap from "../lib/USCorrelationMap.svelte";
   // Reactive variable for storing the data
   let people: Person[] = [];
   let stateData: StateData[] = []
@@ -22,11 +24,7 @@
 
 <div class="container">
     <header>
-        <h1>WHAT SHAPES OUR HEARTS?</h1>
-        
-        <p>Here are {people.length == 0 ? "..." : people.length + " "} [people]</p>
-        <p>Here are {stateData.length == 0 ? "..." : stateData.length + " "} [stateData]</p>
-        <p>Here are {cause_Of_Death.length == 0 ? "..." : cause_Of_Death.length + " "} [cause_Of_Death]</p>
+        <h1>THE STATES OF OUR HEARTS</h1>
     </header>
 
     <!-- Leading Causes Section -->
@@ -130,6 +128,10 @@
             <h4>📍 Maria's Geographic Risk</h4>
             <p>Visualization comparing heart disease rates in Maria's state vs. national average, with breakdown of contributing factors (healthcare access, food environment, built environment for physical activity).</p>
             <p><strong>Finding:</strong> Maria's story mirrors what the data show: both access to healthcare and lifestyle factors shaped by location matter significantly.</p>
+        </div>
+        <div class="viz-placeholder">
+          <h4>🗺️ Heart Disease Deaths by State</h4>
+          <USCorrelationMap data={stateData} />
         </div>
     </section>
 
