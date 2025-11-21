@@ -7,7 +7,8 @@
   import LifestyleFactors from "../lib/LifestyleFactors.svelte";
   
   import '../app.css';
-    import USCorrelationMap from "../lib/USCorrelationMap.svelte";
+  import USCorrelationMap from "../lib/USCorrelationMap.svelte";
+  import Scatter from "$lib/ScatterState.svelte";
   // Reactive variable for storing the data
   let people: Person[] = [];
   let stateData: StateData[] = []
@@ -56,6 +57,7 @@
         <div class="viz-placeholder">
             <h4>📈 Lifestyle Factors & Heart Disease Risk</h4>
             <p>Interactive visualization showing correlation between lifestyle factors (exercise frequency, diet quality, smoking status, sleep hours) and heart disease rates. Could be scatter plots, connected dot plots, or small multiples.</p>
+            <Scatter data={stateData} />
         </div>
 
         <div class="person-card">
