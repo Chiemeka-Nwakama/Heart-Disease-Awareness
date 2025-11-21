@@ -1,26 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import type { Person, StateData, Top5 } from "../types";
-  import { loadTop5Csv, loadKaggleCsv, loadStateData } from "../dataLoaders";
-  import LineChartDeath from "../lib/LineChartDeath.svelte";
-  import StateDataCorrelation from "../lib/USCorrelationMap.svelte";
-  import LifestyleFactors from "../lib/LifestyleFactors.svelte";
-  
-  import '../app.css';
-  import USCorrelationMap from "../lib/USCorrelationMap.svelte";
-  import Scatter from "$lib/ScatterState.svelte";
-  // Reactive variable for storing the data
-  let people: Person[] = [];
-  let stateData: StateData[] = []
-  let cause_Of_Death: Top5[] = [];
-  onMount(async () => {
-    // Load all data in parallel
-    [cause_Of_Death, people, stateData] = await Promise.all([
-      loadTop5Csv(),
-      loadKaggleCsv(),
-      loadStateData(),
-    ]);
-  });
 	import { onMount } from "svelte";
 	import type { Person, StateData, Top5 } from "../types";
 	import { loadTop5Csv, loadKaggleCsv, loadStateData } from "../dataLoaders";
