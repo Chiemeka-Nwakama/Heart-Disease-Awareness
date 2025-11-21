@@ -9,6 +9,7 @@
 
 	import "../app.css";
 	import USCorrelationMap from "../lib/USCorrelationMap.svelte";
+    import Scatter from "../lib/ScatterState.svelte";
 	// Reactive variable for storing the data
 	let people: Person[] = [];
 	let stateData: StateData[] = [];
