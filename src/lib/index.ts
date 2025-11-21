@@ -12,3 +12,6 @@ export {Scroll}
 import RankBar  from './RankBar.svelte'
 
 export {RankBar}
+
+import GroupedBar from './GroupedBar.svelte'
+export {GroupedBar}
