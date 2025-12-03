@@ -8,7 +8,7 @@
 	import GroupedBar from "../lib/GroupedBar.svelte";
 	import RiskMeter from "../lib/RiskMeter.svelte";
 	import LifestyleScatter from "../lib/LifestyleScatter.svelte";
-
+	import LifeStyleFactorsUpdated from "../lib/LifeStyleFactorsUpdated.svelte";
 	import "../app.css";
 	import USCorrelationMap from "../lib/USCorrelationMap.svelte";
     import Scatter from "../lib/ScatterState.svelte";
@@ -123,7 +123,7 @@
 				• Gender comparison (male vs. female rates)<br />
 				• Racial/ethnic disparities in heart disease mortality rates
 			</p>
-			<LifestyleFactors data={people} />
+			<LifeStyleFactorsUpdated data={people} />
 		</div>
 
 		<div class="person-card">

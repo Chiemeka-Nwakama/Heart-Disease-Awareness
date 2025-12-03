@@ -17,7 +17,7 @@ export type Person = {
     BMI: number;  //BMI in number
     WeightInKilograms: number; // weight in kilos
     HeightInMeters: number; //height in meters
-
+    HeartDisease: number; // 0 = no, 1 = yes
 }
 
 export type Top5 = {

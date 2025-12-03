@@ -25,7 +25,7 @@ export async function loadTop5Csv(): Promise<Top5[]> {
 
 export async function loadKaggleCsv(): Promise<Person[]> {
   try {
-    const csvUrl = "./transformed_heart_data_to_numerical.csv";
+    const csvUrl = "./subset_transformed_heart_data.csv"; //changed this to the smaller subset
     const data = await d3.csv(csvUrl, (row) => {
       return {
         State: row.State.trim(),
@@ -46,6 +46,7 @@ export async function loadKaggleCsv(): Promise<Person[]> {
         BMI: Number(row.BMI),
         WeightInKilograms: Number(row.WeightInKilograms),
         HeightInMeters: Number(row.HeightInMeters),
+        HeartDisease: Number(row.HeartDisease),
       };
     });
     console.log("Loaded Kaggle CSV Data:", data);
