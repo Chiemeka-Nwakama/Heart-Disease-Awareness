@@ -9,6 +9,7 @@
 	import RiskMeter from "../lib/RiskMeter.svelte";
 	import LifestyleScatter from "../lib/LifestyleScatter.svelte";
 	import LifeStyleFactorsUpdated from "../lib/LifeStyleFactorsUpdated.svelte";
+	import LifeStyleHeat from "../lib/LifeStyleHeat.svelte";
 	import "../app.css";
 	import USCorrelationMap from "../lib/USCorrelationMap.svelte";
     import Scatter from "../lib/ScatterState.svelte";
@@ -73,18 +74,12 @@
 		<div class="person-card">
 			<h4>Meet Sarah, 45</h4>
 			<div class="details">
-				<p>
-					<strong>Exercise:</strong> 4x per week, moderate intensity
-				</p>
-				<p>
-					<strong>Diet:</strong> Mediterranean-style, low processed
-					foods
-				</p>
+				<p><strong>Exercise:</strong> 4x per week, moderate intensity</p>
+				<p><strong>Diet:</strong> Mediterranean-style, low processed foods</p>
 				<p><strong>Smoking:</strong> Never smoked</p>
 				<p><strong>Sleep:</strong> 7-8 hours nightly</p>
 			</div>
 		</div>
-
 		<div class="viz-placeholder">
 			<h4>⚡ Sarah's Risk Meter</h4>
 			<RiskMeter 
@@ -107,23 +102,20 @@
 				<strong>Finding:</strong> People with habits like Sarah's have
 				about 35% lower risk than the national average.
 			</p>
+			<p>Gauge or meter visualization comparing Sarah's risk to national averages. Shows percentage reduction in risk based on her healthy habits.</p>
+			<p><strong>Finding:</strong> People with habits like Sarah's have about 35% lower risk than the national average.</p>
 		</div>
 	</section>
 
 	<!-- Who We Are Section -->
 	<section id="demographicSection">
 		<h2>Who We Are: Does Age or Background Change the Odds?</h2>
-		<p>Let's see how things shift by age, gender, and race.</p>
+		<p>Let's see how things shift by risk factors. This data is a subset from the national BFSS health survey in 2022. </p>
 
 		<div class="viz-placeholder">
 			<h4>📊 Heart Disease Risk by Demographics</h4>
-			<p>
-				Set of visualizations showing:<br />
-				• Age curves (risk increasing with age)<br />
-				• Gender comparison (male vs. female rates)<br />
-				• Racial/ethnic disparities in heart disease mortality rates
-			</p>
-			<LifeStyleFactorsUpdated data={people} />
+			<!-- <LifeStyleFactorsUpdated data={people} /> -->
+			<LifeStyleHeat />
 		</div>
 
 		<div class="person-card">
