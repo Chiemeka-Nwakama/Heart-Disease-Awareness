@@ -6,6 +6,8 @@
 	import StateDataCorrelation from "../lib/USCorrelationMap.svelte";
 	import LifestyleFactors from "../lib/LifestyleFactors.svelte";
 	import GroupedBar from "../lib/GroupedBar.svelte";
+	import RiskMeter from "../lib/RiskMeter.svelte";
+	import LifestyleScatter from "../lib/LifestyleScatter.svelte";
 
 	import "../app.css";
 	import USCorrelationMap from "../lib/USCorrelationMap.svelte";
@@ -63,25 +65,10 @@
         <div class="viz-placeholder">
             <h4>📈 Lifestyle Factors & Heart Disease Risk</h4>
             <p>Interactive visualization showing correlation between lifestyle factors (exercise frequency, diet quality, smoking status, sleep hours) and heart disease rates. Could be scatter plots, connected dot plots, or small multiples.</p>
-            <Scatter data={stateData} />
+            <!-- <Scatter data={stateData} /> -->
+			<LifestyleScatter/>
         </div>
 	<!-- How We Live Section -->
-	<section id="lifestyleSection">
-		<h2>How We Live: Do Our Habits Matter?</h2>
-		<p>
-			Exercise, food, smoking, sleep – we all know they count, but how
-			much?
-		</p>
-
-		<div class="viz-placeholder">
-			<h4>📈 Lifestyle Factors & Heart Disease Risk</h4>
-			<p>
-				Interactive visualization showing correlation between
-				lifestyle factors (exercise frequency, diet quality, smoking
-				status, sleep hours) and heart disease rates. Could be
-				scatter plots, connected dot plots, or small multiples.
-			</p>
-		</div>
 
 		<div class="person-card">
 			<h4>Meet Sarah, 45</h4>
@@ -100,6 +87,17 @@
 
 		<div class="viz-placeholder">
 			<h4>⚡ Sarah's Risk Meter</h4>
+			<RiskMeter 
+				userName="Sarah"
+				age={45}
+				sex="Female"
+				race="White only, Non-Hispanic"
+				exercisePerWeek={4}
+				sleepHours={7.5}
+				smokerStatus="Never smoked"
+				bmi={23.5}
+				hasDiabetes={false}
+			/>
 			<p>
 				Gauge or meter visualization comparing Sarah's risk to
 				national averages. Shows percentage reduction in risk based
@@ -143,10 +141,17 @@
 
 		<div class="viz-placeholder">
 			<h4>⚠️ James's Risk Profile</h4>
-			<p>
-				Visualization showing elevated risk factors. Comparison of
-				James's demographic risk factors vs. population average.
-			</p>
+			<RiskMeter 
+				userName="James"
+				age={68}
+				sex="Male"
+				race="Black only, Non-Hispanic"
+				exercisePerWeek={0}
+				sleepHours={6.5}
+				smokerStatus="Former smoker"
+				bmi={32.5}
+				hasDiabetes={true}
+			/>
 			<p>
 				<strong>Finding:</strong> People like James face higher risk
 				due to age demographics and genetic factors, with rates 1.5x
@@ -194,12 +199,18 @@
 
 		<div class="viz-placeholder">
 			<h4>📍 Maria's Geographic Risk</h4>
-			<p>
-				Visualization comparing heart disease rates in Maria's state
-				vs. national average, with breakdown of contributing factors
-				(healthcare access, food environment, built environment for
-				physical activity).
-			</p>
+			<RiskMeter 
+				userName="Maria"
+				age={52}
+				sex="Female"
+				race="Multiracial, Non-Hispanic"
+				exercisePerWeek={1}
+				sleepHours={6.5}
+				smokerStatus="Never smoked"
+				bmi={28.5}
+				hasDiabetes={false}
+				state="Mississippi"
+			/>
 			<p>
 				<strong>Finding:</strong> Maria's story mirrors what the data
 				show: both access to healthcare and lifestyle factors shaped
