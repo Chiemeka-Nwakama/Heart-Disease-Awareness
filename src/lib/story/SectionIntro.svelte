@@ -1,0 +1,31 @@
+<script lang="ts">
+	import type { Top5 } from "../../types";
+	import LineChartDeath from "../LineChartDeath.svelte";
+
+	export let cause_Of_Death: Top5[] = [];
+</script>
+
+<section id="deathCauseSection">
+	<p>
+		Heart Disease has been the leading cause of death in the U.S. for
+		the last decade.
+	</p>
+	<div class="viz-placeholder">
+		<!-- <h4>📊 Top 10 Leading Causes of Death in the U.S.</h4>	 -->
+
+		<LineChartDeath data={cause_Of_Death} />
+		<p>
+			Bar chart or horizontal stacked visualization showing heart
+			disease at #1, followed by cancer, COVID-19, accidents,
+			stroke, etc.
+		</p>
+	</div>
+</section>
+
+<p>
+	We looked at data on
+	<a href="#lifestyleSection">lifestyle</a>,
+	<a href="#demographicSection">demographics</a>, and
+	<a href="#locationSection">location</a>
+	to see what really connects to heart disease across the U.S.
+</p>
