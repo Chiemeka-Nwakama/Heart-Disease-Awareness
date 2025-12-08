@@ -78,7 +78,7 @@
     async function loadData() {
         try {
             // Load state mortality data
-            const stateResponse = await fetch('/State_Data.csv');
+            const stateResponse = await fetch('../State_Data.csv');
             const stateText = await stateResponse.text();
             const stateLines = stateText.trim().split('\n');
             const stateHeaders = stateLines[0].split(',');
