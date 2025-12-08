@@ -74,21 +74,16 @@
         left: margin.left,
     };
 
-    // Load and process data
+    // --- Data Loading and Processing using d3.csv ---
     async function loadData() {
         try {
-            // Load state mortality data
-            const stateResponse = await fetch('../State_Data.csv');
-            const stateText = await stateResponse.text();
-            const stateLines = stateText.trim().split('\n');
-            const stateHeaders = stateLines[0].split(',');
+            // 1. Load state mortality/socioeconomic data
+            // Use d3.csv and manually parse relevant fields
+            const stateData: any[] = await d3.csv('../State_Data.csv');
 
-            stateLines.slice(1).forEach(line => {
-                const values = line.split(',');
-                const stateObj: any = {};
-                stateHeaders.forEach((header, i) => {
-                    stateObj[header] = values[i];
-                });
+            stateData.forEach(stateObj => {
+                // Ensure stateObj.StateName exists and isn't empty/invalid
+                if (!stateObj.StateName) return; 
 
                 const totalLabor = parseFloat(stateObj.TotalLaborForce) || 1;
                 const unemployed = parseFloat(stateObj.InLaborForceCivUnemployed) || 0;
@@ -110,25 +105,15 @@
                 });
             });
 
-            // Load lifestyle data
-            const lifestyleResponse = await fetch('/website_summary_data.csv');
-            const lifestyleText = await lifestyleResponse.text();
-            const lifestyleLines = lifestyleText.trim().split('\n');
-            const lifestyleHeaders = lifestyleLines[0].split(',');
+            // 2. Load lifestyle data
+            const lifestyleData: any[] = await d3.csv('/website_summary_data.csv');
 
-            const lifestyleData = lifestyleLines.slice(1).map(line => {
-                const values = line.split(',');
-                const obj: any = {};
-                lifestyleHeaders.forEach((header, i) => {
-                    obj[header] = values[i];
-                });
-                return obj;
-            });
-
-            // Aggregate by state
+            // Aggregate by state (same logic as before, but using d3.csv output)
             const stateAggregates = new Map<string, any>();
             lifestyleData.forEach(row => {
                 const state = row.State;
+                if (!state || !stateDataMap.has(state)) return; // Skip if no state name or no matching mortality data
+
                 if (!stateAggregates.has(state)) {
                     stateAggregates.set(state, {
                         state,
@@ -147,6 +132,7 @@
 
                 const agg = stateAggregates.get(state);
                 agg.count++;
+                // Note: d3.csv parses numeric fields as strings, parseFloat is still necessary
                 agg.totalSleep += parseFloat(row.Avg_SleepHours) || 0;
                 agg.totalBMI += parseFloat(row.Avg_BMI) || 0;
                 agg.totalSmoker += parseFloat(row.Avg_SmokerStatus_Score) || 0;
@@ -158,7 +144,7 @@
                 agg.totalDepression += parseFloat(row.Prevalence_HadDepressiveDisorder) || 0;
             });
 
-            // Calculate averages and combine with state data
+            // 3. Calculate averages and combine data
             data = Array.from(stateAggregates.values())
                 .filter(agg => stateDataMap.has(agg.state))
                 .map(agg => {
@@ -186,7 +172,8 @@
 
             loading = false;
         } catch (e: any) {
-            error = e.message;
+            console.error("Data loading error:", e);
+            error = `Failed to load data: ${e.message}`;
             loading = false;
         }
     }
@@ -200,6 +187,9 @@
 
         const values = data.map(d => d[metric as keyof LifestyleData] as number);
         const extent = d3.extent(values) as [number, number];
+
+        // Ensure there is a valid extent before creating the scale
+        if (extent[0] === undefined || extent[1] === undefined) return null;
 
         return d3.scaleLinear()
             .domain(extent)
@@ -242,19 +232,32 @@
         const xValues = data.map(d => d[xMetric as keyof LifestyleData] as number);
         const yValues = data.map(d => d[yMetric as keyof LifestyleData] as number);
 
-        const n = xValues.length;
-        const sumX = d3.sum(xValues);
-        const sumY = d3.sum(yValues);
-        const sumXY = d3.sum(xValues.map((x, i) => x * yValues[i]));
-        const sumX2 = d3.sum(xValues.map(x => x * x));
+        // Filter out any potential NaN values that might prevent min/max calculation
+        const filteredData = data.filter((d, i) => 
+            !isNaN(xValues[i]) && !isNaN(yValues[i])
+        );
+
+        if (filteredData.length < 2) return '';
+
+        const n = filteredData.length;
+        const filteredX = filteredData.map(d => d[xMetric as keyof LifestyleData] as number);
+        const filteredY = filteredData.map(d => d[yMetric as keyof LifestyleData] as number);
+
+        const sumX = d3.sum(filteredX);
+        const sumY = d3.sum(filteredY);
+        const sumXY = d3.sum(filteredX.map((x, i) => x * filteredY[i]));
+        const sumX2 = d3.sum(filteredX.map(x => x * x));
 
         // Slope (m) = (n * sum(xy) - sum(x) * sum(y)) / (n * sum(x^2) - sum(x)^2)
-        const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+        const denominatorM = (n * sumX2 - sumX * sumX);
+        if (denominatorM === 0) return '';
+        const slope = (n * sumXY - sumX * sumY) / denominatorM;
+        
         // Intercept (b) = (sum(y) - m * sum(x)) / n
         const intercept = (sumY - slope * sumX) / n;
 
-        const xMin = d3.min(xValues)!;
-        const xMax = d3.max(xValues)!;
+        const xMin = d3.min(filteredX)!;
+        const xMax = d3.max(filteredX)!;
 
         const y1 = slope * xMin + intercept;
         const y2 = slope * xMax + intercept;
@@ -347,11 +350,11 @@
                 <div class="insight-text">
                     {#if Math.abs(correlation) > 0.6}
                         <strong>Strong relationship!</strong> States with {correlation > 0 ? 'higher' : 'lower'}
-                         {getMetricLabel(xMetric).toLowerCase()} tend to have {correlation > 0 ? 'higher' : 'lower'}
-                         {getMetricLabel(yMetric).toLowerCase()}.
+                          {getMetricLabel(xMetric).toLowerCase()} tend to have {correlation > 0 ? 'higher' : 'lower'}
+                          {getMetricLabel(yMetric).toLowerCase()}.
                     {:else if Math.abs(correlation) > 0.3}
                         <strong>Moderate correlation.</strong> {getMetricLabel(xMetric)} and
-                         {getMetricLabel(yMetric).toLowerCase()} are related, but other factors also play a role.
+                          {getMetricLabel(yMetric).toLowerCase()} are related, but other factors also play a role.
                     {:else}
                         <strong>Weak relationship.</strong> Other factors may be more influential than {getMetricLabel(xMetric).toLowerCase()}.
                     {/if}
@@ -374,28 +377,30 @@
 
                 <g class="points">
                     {#each data as point}
-                        <circle
-                            cx={xScale ? xScale(point[xMetric as keyof LifestyleData] as number) : usableArea.left}
-                            cy={yScale ? yScale(point[yMetric as keyof LifestyleData] as number) : usableArea.bottom}
-                            r={selectedState === point ? 8 : 6}
-                            fill={selectedState === point ? "#e74c3c" : "rgba(102, 126, 234, 0.7)"}
-                            stroke={selectedState === point ? "#c0392b" : "#667eea"}
-                            stroke-width={selectedState === point ? 3 : 2}
-                            opacity={selectedState && selectedState !== point ? 0.2 : 1}
-                            onclick={() => handleStateClick(point)}
-                            class="data-point"
-                        >
-                            <title>{point.state}</title>
-                        </circle>
-                        {#if selectedState === point}
-                            <text
-                                x={xScale ? xScale(point[xMetric as keyof LifestyleData] as number) : usableArea.left}
-                                y={(yScale ? yScale(point[yMetric as keyof LifestyleData] as number) : usableArea.bottom) - 15}
-                                text-anchor="middle"
-                                class="state-label-chart"
+                        {#if xScale && yScale}
+                            <circle
+                                cx={xScale(point[xMetric as keyof LifestyleData] as number)}
+                                cy={yScale(point[yMetric as keyof LifestyleData] as number)}
+                                r={selectedState === point ? 8 : 6}
+                                fill={selectedState === point ? "#e74c3c" : "rgba(102, 126, 234, 0.7)"}
+                                stroke={selectedState === point ? "#c0392b" : "#667eea"}
+                                stroke-width={selectedState === point ? 3 : 2}
+                                opacity={selectedState && selectedState !== point ? 0.2 : 1}
+                                onclick={() => handleStateClick(point)}
+                                class="data-point"
                             >
-                                {point.state}
-                            </text>
+                                <title>{point.state}</title>
+                            </circle>
+                            {#if selectedState === point}
+                                <text
+                                    x={xScale(point[xMetric as keyof LifestyleData] as number)}
+                                    y={yScale(point[yMetric as keyof LifestyleData] as number) - 15}
+                                    text-anchor="middle"
+                                    class="state-label-chart"
+                                >
+                                    {point.state}
+                                </text>
+                            {/if}
                         {/if}
                     {/each}
                 </g>
@@ -684,7 +689,7 @@
     }
     .factsheet-header {
         display: flex;
-        justify-content: space-between; /* Completed CSS */
+        justify-content: space-between;
         align-items: center;
         margin-bottom: 15px;
         border-bottom: 1px solid #f3f4f6;
