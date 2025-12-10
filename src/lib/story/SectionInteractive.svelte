@@ -25,12 +25,5 @@
 			percentage change from baseline.
 		</p>
 	</div>
-	<div class="viz-placeholder">
-		<h4>Smoker Status By Age Group</h4>
-		<p>
-			Side-by-side bar charts showing prevalence of smoking status
-			across different age groups.
-		</p>
-		<GroupedBar {people} />
-	</div>
+	
 </section>
