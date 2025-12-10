@@ -4,11 +4,11 @@
 </script>
 
 <section id="demographicSection">
-	<h2>Who We Are: Does Age or Background Change the Odds?</h2>
-	<p>Let's see how things shift by risk factors. This data is a subset from the national BFSS health survey in 2022. </p>
+	<h2>Who We Are: Does Age or Predisposed Health Conditions Change the Odds?</h2>
+	<p>Let's see how things shift by risk factors. These are a subset of predisposed risk factors an individual may have. This is based on a 100k subset of data from the national BFSS health survey in 2022, openly available on Kaggle. </p>
 
 	<div class="viz-placeholder">
-		<h4>📊 Heart Disease Risk by Demographics</h4>
+		<!-- <h4>📊 Heart Disease Risk by Demographics</h4> -->
 		<LifeStyleHeat />
 	</div>
 

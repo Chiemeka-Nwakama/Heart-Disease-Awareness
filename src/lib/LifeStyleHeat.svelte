@@ -1,63 +1,52 @@
 <script lang="ts">
 	import * as d3 from "d3";
+	import { crossfade } from "svelte/transition";
+
+	let [send, receive] = crossfade({
+		duration: 400,
+	});
 
 	// Correlation data
 	const correlationData = {
 		variables: [
 			"AgeCategory",
-			"SleepHours",
+			"BMI",
 			"HadDepressiveDisorder",
 			"HadDiabetes",
-			"SmokerStatus",
-			"BMI",
-			"AlcoholDrinkers",
 			"CovidPos",
 			"Heart Disease"
 		],
 		labels: {
-			AgeCategory: "Age Category",
-			SleepHours: "Sleep Hours",
+			AgeCategory: "Age",
+			BMI: "BMI",
 			HadDepressiveDisorder: "Depression",
 			HadDiabetes: "Diabetes",
-			SmokerStatus: "Smoking Status",
-			BMI: "Body Mass Index",
-			AlcoholDrinkers: "Alcohol Use",
 			CovidPos: "COVID-19",
 			"Heart Disease": "Heart Disease"
 		},
 		matrix: [
-			[1, 0.123431413, -0.11397264, 0.148483494, 0.046156517, -0.017289875, -0.13262566, -0.177545067, 0.284503355],
-			[0.123431413, 1, -0.046650744, -0.006339026, -0.050861699, -0.054495115, -0.006458462, -0.046173077, 0.005730431],
-			[-0.11397264, -0.046650744, 1, 0.051195951, 0.117338167, 0.104779684, -0.031348434, 0.038095127, 0.090491391],
-			[0.148483494, -0.006339026, 0.051195951, 1, 0.029481719, 0.175715775, -0.120993669, -0.004085989, 0.141712112],
-			[0.046156517, -0.050861699, 0.117338167, 0.029481719, 1, 0.000631842, 0.000638415, -0.050816832, 0.185291307],
-			[-0.017289875, -0.054495115, 0.104779684, 0.175715775, 0.000631842, 1, -0.069047672, 0.060383547, 0.061257768],
-			[-0.13262566, -0.006458462, -0.031348434, -0.120993669, 0.000638415, -0.069047672, 1, 0.051884478, -0.122616206],
-			[-0.177545067, -0.046173077, 0.038095127, -0.004085989, -0.050816832, 0.060383547, 0.051884478, 1, -0.03879833],
-			[0.284503355, 0.005730431, 0.090491391, 0.141712112, 0.185291307, 0.061257768, -0.122616206, -0.03879833, 1]
+			[1.000000, -0.026596,-0.114859, 0.147451,-0.174950,0.287559],
+			[-0.026596,	1.000000,	0.103362,	0.171439,	0.063094,	0.055309],
+			[-0.114859,	0.103362,	1.000000, 0.051338,	0.040540,	0.089250],
+			[0.147451,	0.171439,	0.051338,	1.000000,	-0.003036,	0.145988],
+			[ -0.174950,	0.063094,	0.040540,	-0.003036,	1.000000,	-0.037894],
+			[0.287559,	0.055309,	0.089250,	0.145988,	-0.037894,	1.000000]
 		]
 	};
 
 	// Settings
 	const cellSize = 60;
-	const margin = { top: 120, right: 20, bottom: 60, left: 140 };
+	const margin = { top: 60, right: 10, bottom: 20, left: 70 };
 	const width = cellSize * correlationData.variables.length + margin.left + margin.right;
 	const height = cellSize * correlationData.variables.length + margin.top + margin.bottom;
 
 	let hoveredCell = null;
-	let selectedCell = null;
-	let explanation: {
-		factor: string;
-		value: number;
-		direction: string;
-		strength: string;
-		text: string;
-	} | null = null;
+	let selectedFactor: string | null = null;
 
 	// Color scale
 	const colorScale = d3.scaleLinear()
 		.domain([-1, -0.5, 0, 0.5, 1])
-		.range(["#b91c1c", "#fca5a5", "#ffffff", "#93c5fd", "#1d4ed8"]);
+		.range(["#b91c1c", "#fca5a5", "#f8fafc", "#93c5fd", "#1d4ed8"]);
 
 	// Create flattened data
 	const flatData = correlationData.variables.flatMap((rowVar, i) => 
@@ -71,6 +60,75 @@
 			colLabel: correlationData.labels[colVar] || colVar
 		}))
 	);
+
+	// Get Heart Disease column index
+	const heartDiseaseCol = correlationData.variables.indexOf("Heart Disease");
+
+	// Get explanations for each factor's correlation with Heart Disease
+	function getExplanations() {
+		const explanations: Record<string, {
+		value: number;
+		strength: string;
+		direction: string;
+		text: string;
+		source?: string;
+		sourceUrl?: string;
+		}> = {};		correlationData.variables.forEach((variable, i) => {
+			if (variable !== "Heart Disease") {
+				const value = correlationData.matrix[i][heartDiseaseCol];
+				const abs = Math.abs(value);
+				let strength = "";
+				if (abs >= 0.7) strength = "very strong";
+				else if (abs >= 0.5) strength = "strong";
+				else if (abs >= 0.3) strength = "moderate";
+				else if (abs >= 0.1) strength = "weak";
+				else strength = "very weak";
+
+				const direction = Math.abs(value) < 0.01 ? "no" : (value > 0 ? "positive" : "negative");
+
+				const details: Record<string, { text: string; source?: string; sourceUrl?: string }> = {
+					AgeCategory: {
+						text: "Heart disease becomes more prevalent with age, aligning with clinical expectations.",
+						source: "American Heart Association",
+						sourceUrl: "https://www.heart.org/en/healthy-living/healthy-lifestyle/how-to-help-prevent-heart-disease-at-any-age"
+					},
+					HadDepressiveDisorder: {
+						text: "Depression and heart disease can occur together. There is a higher risk through chronic stress and behavioral changes.",
+						source: "John Hopkins Medicine",
+						sourceUrl: "https://www.hopkinsmedicine.org/health/conditions-and-diseases/depression-and-heart-disease"
+					},
+					HadDiabetes: {
+						text: "Diabetes contributes to long-term vascular damage. According to the CDC, people with diabetes have twice the risk of developing heart disease.",
+						source: "CDC - Diabetes and Heart Disease",
+						sourceUrl: "https://www.cdc.gov/diabetes/diabetes-complications/diabetes-and-your-heart.html"
+					},
+					BMI: {
+						text: "BMI shows a weak correlation in this dataset. However, a higher BMI can be a health risk. Weight alone may not capture metabolic health factors.",
+						source: "National Library of Medicine",
+						sourceUrl: "https://pmc.ncbi.nlm.nih.gov/articles/PMC6378495/#section2-1559827618812395"
+					},
+					CovidPos: {
+						text: "COVID-19 history shows only a very weak relationship with heart disease in this dataset. However, heart problems can arise post-infection.",
+						source: "Cleveland Clinic",
+						sourceUrl: "https://my.clevelandclinic.org/health/articles/heart-problems-after-covid"
+					}
+				};
+
+				explanations[variable] = {
+					value,
+					strength,
+					direction,
+					text: details[variable]?.text || "",
+					source: details[variable]?.source,
+					sourceUrl: details[variable]?.sourceUrl
+				};
+			}
+		});
+
+		return explanations;
+	}
+
+	const explanations = getExplanations();
 
 	function getCorrelationStrength(value: number): string {
 		const abs = Math.abs(value);
@@ -86,88 +144,165 @@
 		return value > 0 ? "Positive" : "Negative";
 	}
 
-	function getExplanationText(factor: string, value: number): string {
-		const direction = getCorrelationDirection(value);
-		const strength = getCorrelationStrength(value).toLowerCase();
-
-		const base = `This factor has a ${strength} ${direction.toLowerCase()} correlation with heart disease.`;
-
-		const details: Record<string, string> = {
-			AgeCategory: " Heart disease becomes more common with increasing age, which aligns with clinical expectations.",
-			SleepHours: " Sleep duration has a very weak association, meaning it does not strongly predict heart disease in this dataset.",
-			HadDepressiveDisorder: " Depression is associated with increased cardiovascular risk, likely due to chronic stress and behavioral changes.",
-			HadDiabetes: " Diabetes contributes to long-term vascular damage, increasing heart disease likelihood.",
-			SmokerStatus: " Smoking harms blood vessels and increases inflammation, a known major cardiovascular risk factor.",
-			BMI: " BMI shows a weak correlation—weight alone may not capture metabolic factors well.",
-			AlcoholDrinkers: " The negative correlation may reflect moderate drinkers having lower measured heart risk, a pattern sometimes seen in survey data.",
-			CovidPos: " COVID history shows only a very weak relationship with heart disease in this dataset."
-		};
-
-		return base + (details[factor] || "");
+	function handleCellClick(cell: any) {
+		// Only allow clicking on Heart Disease column (not diagonal)
+		if (cell.col === heartDiseaseCol && cell.row !== heartDiseaseCol) {
+			selectedFactor = selectedFactor === cell.rowVar ? null : cell.rowVar;
+		}
 	}
 
-	function handleCellClick(cell: any) {
-		selectedCell = cell;
-		
-		// Only show explanation when clicking on Heart Disease column (not the diagonal)
-		if (cell.colLabel === "Heart Disease" && cell.rowLabel !== "Heart Disease") {
-			explanation = {
-				factor: cell.rowLabel,
-				value: cell.value,
-				direction: getCorrelationDirection(cell.value),
-				strength: getCorrelationStrength(cell.value),
-				text: getExplanationText(cell.rowVar, cell.value)
-			};
-		} else if (cell.rowLabel === "Heart Disease" && cell.colLabel !== "Heart Disease") {
-			explanation = {
-				factor: cell.colLabel,
-				value: cell.value,
-				direction: getCorrelationDirection(cell.value),
-				strength: getCorrelationStrength(cell.value),
-				text: getExplanationText(cell.colVar, cell.value)
-			};
-		} else {
-			explanation = null;
-		}
+	function isHeartDiseaseColumn(col: number): boolean {
+		return col === heartDiseaseCol;
 	}
 </script>
 
 <style>
 	.container {
-		padding: 2rem;
 		background: #ffffff;
-		border-radius: 16px;
-		box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 		max-width: 100%;
 		margin: 0 auto;
 		overflow: visible;
 	}
 
 	h2 {
-		font-size: 24px;
+		font-size: 20px;
 		font-weight: 700;
 		color: #1f2937;
 		margin: 0 0 0.5rem 0;
-		text-align: center;
+		padding: 1.5rem 1.5rem 0 1.5rem;
 	}
 
 	.subtitle {
-		text-align: center;
 		color: #6b7280;
-		font-size: 14px;
+		font-size: 13px;
 		margin-bottom: 1.5rem;
+		padding: 0 1.5rem;
+	}
+
+	.main-layout {
+		display: grid;
+		grid-template-columns: 300px 1fr;
+		gap: 2rem;
+		padding: 0 1.5rem 1.5rem 1.5rem;
+		align-items: start;
+	}
+
+	.explanation-sidebar {
+		position: sticky;
+		top: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.card-wrapper {
+		position: relative;
+	}
+
+	.explanation-card {
+		background: #f9fafb;
+		border-radius: 8px;
+		padding: 1rem;
+		border: 2px solid transparent;
+		cursor: pointer;
+		transition: all 0.1s ease;
+		position: absolute;
+		width: 90%;
+	}
+
+	.explanation-card:hover {
+		background: #f3f4f6;
+		border-color: #e5e7eb;
+	}
+
+	.explanation-card.selected {
+		background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+		border-color: #3b82f6;
+		box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+	}
+
+	.card-collapsed {
+		height: 48px;
+	}
+
+	.card-expanded {
+		min-height: 180px;
+	}
+
+	.exp-title {
+		font-size: 14px;
+		font-weight: 700;
+		color: #1f2937;
+	}
+
+	.exp-content {
+		margin-top: 0.75rem;
+	}
+
+	.exp-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.exp-value {
+		font-size: 13px;
+		font-weight: 700;
+		padding: 2px 8px;
+		border-radius: 4px;
+		background: white;
+	}
+
+	.exp-value.positive {
+		color: #1d4ed8;
+	}
+
+	.exp-value.negative {
+		color: #b91c1c;
+	}
+
+	.exp-meta {
+		font-size: 11px;
+		color: #6b7280;
+		margin-bottom: 0.5rem;
+		text-transform: capitalize;
+	}
+
+	.exp-text {
+		font-size: 11px;
+		color: #374151;
+		line-height: 1.4;
+		margin-bottom: 0.5rem;
+	}
+
+	.exp-source {
+		font-size: 10px;
+		margin-top: 0.5rem;
+		padding-top: 0.5rem;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.exp-source a {
+		color: #3b82f6;
+		text-decoration: none;
+		font-weight: 600;
+		transition: color 0.2s ease;
+	}
+
+	.exp-source a:hover {
+		color: #1d4ed8;
+		text-decoration: underline;
 	}
 
 	.viz-wrapper {
 		display: flex;
-		justify-content: center;
-		align-items: center;
+		justify-content: flex-start;
 		background: white;
-		border-radius: 12px;
+		border-radius: 8px;
 		padding: 1rem;
-		margin-bottom: 1.5rem;
 		overflow-x: auto;
-		overflow-y: visible;
 	}
 
 	svg {
@@ -176,11 +311,14 @@
 	}
 
 	.cell {
-		cursor: pointer;
-		transition: all 0.2s ease;
+		transition: all 0.15s ease;
 	}
 
-	.cell:hover {
+	.cell.clickable {
+		cursor: pointer;
+	}
+
+	.cell.clickable:hover {
 		stroke: #1f2937;
 		stroke-width: 2;
 	}
@@ -190,11 +328,20 @@
 		stroke-width: 3;
 	}
 
+	.cell.heart-disease-col {
+		stroke: #3b82f6;
+		stroke-width: 1.5;
+	}
+
 	.axis-label {
-		font-size: 12px;
+		font-size: 11px;
 		font-weight: 600;
 		fill: #1f2937;
-		cursor: default;
+	}
+
+	.axis-label.highlight {
+		fill: #3b82f6;
+		font-weight: 700;
 	}
 
 	.cell-value {
@@ -208,27 +355,28 @@
 		position: fixed;
 		background: rgba(17, 24, 39, 0.95);
 		color: white;
-		padding: 12px 16px;
-		border-radius: 8px;
-		font-size: 13px;
+		padding: 10px 14px;
+		border-radius: 6px;
+		font-size: 12px;
 		pointer-events: none;
 		z-index: 1000;
 		box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-		max-width: 280px;
-		line-height: 1.6;
+		max-width: 240px;
+		line-height: 1.5;
 	}
 
 	.tooltip-title {
 		font-weight: 700;
-		margin-bottom: 8px;
+		margin-bottom: 6px;
 		color: #60a5fa;
-		font-size: 14px;
+		font-size: 13px;
 	}
 
 	.tooltip-row {
 		display: flex;
 		justify-content: space-between;
-		margin-bottom: 4px;
+		margin-bottom: 3px;
+		font-size: 11px;
 	}
 
 	.legend {
@@ -236,33 +384,26 @@
 		justify-content: center;
 		align-items: center;
 		gap: 1rem;
-		margin-top: 1.5rem;
-		padding: 1rem;
+		margin-top: 1rem;
+		padding: 0.75rem;
 		background: #f9fafb;
-		border-radius: 12px;
-		flex-wrap: wrap;
+		border-radius: 8px;
 	}
 
 	.legend-title {
 		font-weight: 600;
 		color: #1f2937;
-		font-size: 14px;
-	}
-
-	.legend-gradient {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+		font-size: 12px;
 	}
 
 	.gradient-bar {
-		width: 250px;
-		height: 20px;
-		border-radius: 6px;
+		width: 200px;
+		height: 16px;
+		border-radius: 4px;
 		background: linear-gradient(to right, 
 			#b91c1c 0%, 
 			#fca5a5 25%, 
-			#ffffff 50%, 
+			#f8fafc 50%, 
 			#93c5fd 75%, 
 			#1d4ed8 100%);
 		border: 1px solid #e5e7eb;
@@ -271,208 +412,192 @@
 	.gradient-labels {
 		display: flex;
 		justify-content: space-between;
-		width: 250px;
-		font-size: 11px;
+		width: 200px;
+		font-size: 10px;
 		color: #6b7280;
 		font-weight: 500;
+		margin-top: 4px;
 	}
 
-	.info-box {
-		background: #dbeafe;
-		padding: 1rem;
-		border-radius: 8px;
-		margin-top: 1rem;
-		font-size: 14px;
-		color: #1e40af;
-		border-left: 4px solid #3b82f6;
-	}
-
-	.info-box strong {
-		color: #1e3a8a;
-	}
-
-	.explanation-panel {
-		background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-		border-left: 4px solid #3b82f6;
-		padding: 1.5rem;
-		border-radius: 12px;
-		margin: 1.5rem 0;
-		box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-		animation: slideIn 0.3s ease-out;
-	}
-
-	@keyframes slideIn {
-		from {
-			opacity: 0;
-			transform: translateY(-10px);
+	@media (max-width: 1024px) {
+		.main-layout {
+			grid-template-columns: 1fr;
 		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
+
+		.explanation-sidebar {
+			position: static;
+			flex-direction: row;
+			overflow-x: auto;
+			gap: 1rem;
+			margin-bottom: 1rem;
+			
 		}
-	}
-
-	.explanation-panel h3 {
-		margin: 0 0 1rem 0;
-		font-size: 18px;
-		font-weight: 700;
-		color: #1e3a8a;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.explanation-panel h3::before {
-		content: "📊";
-		font-size: 20px;
-	}
-
-	.exp-row {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 8px;
-		font-size: 14px;
-		color: #1e40af;
-		padding: 0.5rem;
-		background: rgba(255, 255, 255, 0.6);
-		border-radius: 6px;
-	}
-
-	.exp-row strong {
-		color: #1e3a8a;
-		font-weight: 700;
-	}
-
-	.exp-text {
-		margin-top: 1rem;
-		padding: 1rem;
-		font-size: 14px;
-		color: #1e3a8a;
-		line-height: 1.6;
-		background: rgba(255, 255, 255, 0.8);
-		border-radius: 8px;
-		border: 1px solid #bfdbfe;
-	}
-
-	.close-btn {
-		float: right;
-		background: none;
-		border: none;
-		font-size: 20px;
-		cursor: pointer;
-		color: #6b7280;
-		padding: 0;
-		width: 24px;
-		height: 24px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 4px;
-		transition: all 0.2s;
-	}
-
-	.close-btn:hover {
-		background: rgba(0, 0, 0, 0.1);
-		color: #1f2937;
 	}
 </style>
 
 <div class="container">
 	<h2>Heart Disease Risk Factor Correlations</h2>
 	<div class="subtitle">
-		Click on Heart Disease row/column cells to see detailed explanations
+		Click cells in the highlighted Heart Disease column to explore correlations
 	</div>
 
-	{#if explanation}
-	<div class="explanation-panel">
-		<button class="close-btn" on:click={() => explanation = null}>×</button>
-		<h3>{explanation.factor}</h3>
-		<div class="exp-row">
-			<span>Correlation:</span>
-			<strong>{explanation.value.toFixed(3)}</strong>
-		</div>
-		<div class="exp-row">
-			<span>Direction:</span>
-			<strong>{explanation.direction}</strong>
-		</div>
-		<div class="exp-row">
-			<span>Strength:</span>
-			<strong>{explanation.strength}</strong>
-		</div>
-		<p class="exp-text">{explanation.text}</p>
-	</div>
-	{/if}
+	<div class="main-layout">
+		<!-- Left sidebar with animated cards -->
+		<div class="explanation-sidebar">
 
-	<div class="viz-wrapper">
-		<svg {width} {height}>
-			<g transform="translate({margin.left}, {margin.top})">
-				<!-- Row labels -->
-				{#each correlationData.variables as variable, i}
-					<text
-						class="axis-label"
-						x="-10"
-						y={i * cellSize + cellSize / 2}
-						text-anchor="end"
-						dominant-baseline="middle"
-					>
-						{correlationData.labels[variable] || variable}
-					</text>
-				{/each}
-
-				<!-- Column labels -->
-				{#each correlationData.variables as variable, j}
-					<text
-						class="axis-label"
-						x={j * cellSize + cellSize / 2}
-						y="-10"
-						text-anchor="start"
-						transform="rotate(-45, {j * cellSize + cellSize / 2}, -10)"
-					>
-						{correlationData.labels[variable] || variable}
-					</text>
-				{/each}
-
-				<!-- Cells -->
-				{#each flatData as cell}
-					<g>
-						<rect
-							class="cell"
-							class:selected={selectedCell?.row === cell.row && selectedCell?.col === cell.col}
-							x={cell.col * cellSize}
-							y={cell.row * cellSize}
-							width={cellSize}
-							height={cellSize}
-							fill={colorScale(cell.value)}
-							stroke="#e5e7eb"
-							stroke-width="1"
-							on:mouseenter={(e) => {
-								hoveredCell = {
-									...cell,
-									x: e.clientX,
-									y: e.clientY
-								};
-							}}
-							on:mouseleave={() => {
-								hoveredCell = null;
-							}}
-							on:click={() => handleCellClick(cell)}
-						/>
-						
-						<!-- Value text -->
-						<text
-							class="cell-value"
-							x={cell.col * cellSize + cellSize / 2}
-							y={cell.row * cellSize + cellSize / 2}
-							text-anchor="middle"
-							dominant-baseline="middle"
-							fill={Math.abs(cell.value) > 0.5 ? "white" : "#1f2937"}
+			{#each Object.entries(explanations) as [variable, exp]}
+				<div class="card-wrapper" style="height: {selectedFactor === variable ? '190px' : '72px'}">
+					{#if selectedFactor !== variable}
+						<!-- Collapsed card -->
+						<div
+							class="explanation-card card-collapsed"
+							on:click={() => selectedFactor = variable}
+							in:receive={{ key: variable }}
+							out:send={{ key: variable }}
 						>
-							{cell.value.toFixed(2)}
-						</text>
+							<div 
+								class="exp-title"
+								in:receive={{ key: `${variable}-title` }}
+								out:send={{ key: `${variable}-title` }}
+							>
+								{correlationData.labels[variable]}
+							</div>
+						</div>
+					{:else}
+						<!-- Expanded card -->
+						<div
+							class="explanation-card card-expanded selected"
+							on:click={() => selectedFactor = null}
+							in:receive={{ key: variable }}
+							out:send={{ key: variable }}
+						>
+							<div class="exp-header">
+								<div 
+									class="exp-title"
+									in:receive={{ key: `${variable}-title` }}
+									out:send={{ key: `${variable}-title` }}
+								>
+									{correlationData.labels[variable]}
+								</div>
+								<div 
+									class="exp-value"
+									class:positive={exp.value > 0}
+									class:negative={exp.value < 0}
+								>
+									{exp.value.toFixed(2)}
+								</div>
+							</div>
+							<div class="exp-content">
+								<div class="exp-meta">
+									{exp.strength} {exp.direction} correlation
+								</div>
+								<div class="exp-text">{exp.text}</div>
+							{#if exp.sourceUrl}
+								<div class="exp-source">
+									<a href={exp.sourceUrl} target="_blank" rel="noopener noreferrer">
+										{exp.source || "Source"} →
+									</a>
+								</div>
+							{/if}
+							</div>
+						</div>
+					{/if}
+				</div>
+			{/each}
+		</div>
+
+		<!-- Right side with heatmap -->
+		<div>
+			<div class="viz-wrapper">
+				<svg {width} {height}>
+					<g transform="translate({margin.left}, {margin.top})">
+						<!-- Row labels -->
+						{#each correlationData.variables as variable, i}
+							<text
+								class="axis-label"
+								class:highlight={selectedFactor === variable}
+								x="-10"
+								y={i * cellSize + cellSize / 2}
+								text-anchor="end"
+								dominant-baseline="middle"
+							>
+								{correlationData.labels[variable] || variable}
+							</text>
+						{/each}
+
+						<!-- Column labels -->
+						{#each correlationData.variables as variable, j}
+							<text
+								class="axis-label"
+								class:highlight={j === heartDiseaseCol}
+								x={j * cellSize + cellSize / 2}
+								y="-10"
+								text-anchor="start"
+								transform="rotate(-45, {j * cellSize + cellSize / 2}, -10)"
+							>
+								{correlationData.labels[variable] || variable}
+							</text>
+						{/each}
+
+						<!-- Cells -->
+						{#each flatData as cell}
+							{@const isClickable = cell.col === heartDiseaseCol && cell.row !== heartDiseaseCol}
+							{@const isSelected = selectedFactor === cell.rowVar && cell.col === heartDiseaseCol}
+							<g>
+								<rect
+									class="cell"
+									class:clickable={isClickable}
+									class:selected={isSelected}
+									class:heart-disease-col={cell.col === heartDiseaseCol}
+									x={cell.col * cellSize}
+									y={cell.row * cellSize}
+									width={cellSize}
+									height={cellSize}
+									fill={colorScale(cell.value)}
+									stroke="#e5e7eb"
+									stroke-width="1"
+									on:mouseenter={(e) => {
+										hoveredCell = {
+											...cell,
+											x: e.clientX,
+											y: e.clientY
+										};
+									}}
+									on:mouseleave={() => {
+										hoveredCell = null;
+									}}
+									on:click={() => handleCellClick(cell)}
+								/>
+								
+								<!-- Value text -->
+								<text
+									class="cell-value"
+									x={cell.col * cellSize + cellSize / 2}
+									y={cell.row * cellSize + cellSize / 2}
+									text-anchor="middle"
+									dominant-baseline="middle"
+									fill={Math.abs(cell.value) > 0.5 ? "white" : "#1f2937"}
+								>
+									{cell.value.toFixed(2)}
+								</text>
+							</g>
+						{/each}
 					</g>
-				{/each}
-			</g>
-		</svg>
+				</svg>
+			</div>
+
+			<div class="legend">
+				<div class="legend-title">Scale:</div>
+				<div>
+					<div class="gradient-bar"></div>
+					<div class="gradient-labels">
+						<span>-1.0</span>
+						<span>0</span>
+						<span>1.0</span>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	{#if hoveredCell}
@@ -481,40 +606,13 @@
 				{hoveredCell.rowLabel} × {hoveredCell.colLabel}
 			</div>
 			<div class="tooltip-row">
-				<span>Correlation:</span>
+				<span>Value:</span>
 				<strong>{hoveredCell.value.toFixed(3)}</strong>
 			</div>
 			<div class="tooltip-row">
-				<span>Direction:</span>
-				<strong>{getCorrelationDirection(hoveredCell.value)}</strong>
-			</div>
-			<div class="tooltip-row">
-				<span>Strength:</span>
-				<strong>{getCorrelationStrength(hoveredCell.value)}</strong>
+				<span>Type:</span>
+				<strong>{getCorrelationDirection(hoveredCell.value)} {getCorrelationStrength(hoveredCell.value)}</strong>
 			</div>
 		</div>
 	{/if}
-
-	<div class="legend">
-		<div class="legend-title">Correlation Scale:</div>
-		<div class="legend-gradient">
-			<div>
-				<div class="gradient-bar"></div>
-				<div class="gradient-labels">
-					<span>-1.0</span>
-					<span>-0.5</span>
-					<span>0</span>
-					<span>0.5</span>
-					<span>1.0</span>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="info-box">
-		<strong>How to read:</strong> Correlation values range from -1 to +1. 
-		<strong>Positive values</strong> (blue) mean factors increase together. 
-		<strong>Negative values</strong> (red) mean when one increases, the other decreases. 
-		Values closer to 0 (white) indicate weak or no relationship.
-	</div>
 </div>
