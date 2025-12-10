@@ -52,18 +52,13 @@
         { value: 'prevalenceAlcoholDrinkers', label: 'Alcohol Consumption Rate', category: 'Lifestyle' },
         { value: 'avgPhysicalActivity', label: 'Physical Activity Score', category: 'Lifestyle' },
     ];
-    const healthMetrics = [
-        { value: 'prevalenceDiabetes', label: 'Diabetes Prevalence', category: 'Health' },
-        { value: 'prevalenceCOPD', label: 'COPD Prevalence', category: 'Health' },
-        { value: 'prevalenceDepression', label: 'Depression Prevalence', category: 'Health' },
-    ];
     const outcomeMetrics = [
         { value: 'mortalityRate', label: 'Heart Disease Mortality Rate', category: 'Outcome' },
         { value: 'prevalenceHeartAttack', label: 'Heart Attack Prevalence', category: 'Outcome' },
         { value: 'prevalenceStroke', label: 'Stroke Prevalence', category: 'Outcome' },
     ];
 
-    const allXMetrics = [...lifestyleMetrics, ...healthMetrics];
+    const allXMetrics = [...lifestyleMetrics];
     const allYMetrics = [...outcomeMetrics];
 
     let xMetric = $state('avgBMI');
@@ -324,11 +319,6 @@
                             <option value={metric.value}>{metric.label}</option>
                         {/each}
                     </optgroup>
-                    <optgroup label="Health Conditions">
-                        {#each healthMetrics as metric}
-                            <option value={metric.value}>{metric.label}</option>
-                        {/each}
-                    </optgroup>
                 </select>
             </div>
             <div class="control-section">
@@ -437,7 +427,7 @@
                 <div class="factsheet-grid">
                     <div class="fact-section">
                         <h4>🫀 Heart Health</h4>
-                        <div class="fact-items">
+                         <div class="fact-items">
                             <div class="fact-item highlight">
                                 <span class="label">Mortality Rate:</span>
                                 <span class="value">{selectedState.mortalityRate.toFixed(1)}/100k</span>
@@ -477,7 +467,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="fact-section">
+                    <!-- <div class="fact-section">
                         <h4>💼 Socioeconomic</h4>
                         <div class="fact-items">
                             <div class="fact-item">
@@ -514,7 +504,7 @@
                                 <span class="value">{selectedState.prevalenceDepression.toFixed(2)}%</span>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         {:else}

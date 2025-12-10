@@ -15,11 +15,12 @@
 		<div class="viz-placeholder">
 			<h4>🗺️ Heart Disease Mortality by State</h4>
 			<p>
-				Choropleth map of the United States showing heart disease
-				death rates per 100,000 by state. Southern states
-				(Mississippi, Alabama, Oklahoma, Louisiana) highlighted in
-				darker reds; Western/Northern states (Minnesota, Colorado,
-				Hawaii, Massachusetts) in lighter shades.
+				A bivariate choropleth map of the United States showing heart disease
+				death rates per 100,000 by state and actual death rates. We see states with high deaths but low
+				mortality rates like California, Arizona, and Florida in lighter greens. This suggests that 
+				the high death count is a factor of population and not a high mortality rate. Conversely,
+				we see West Virgina and Oklahoma with a purple suggesting that the death rate to heart disease is 
+				high but the actual death rate is low due to the lower populations of these states.
 			</p>
 			<USCorrelationMap data={stateData} />
 		</div>
