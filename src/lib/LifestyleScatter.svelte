@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-    const { base } = $props();
+   
 
 
 
@@ -10,7 +10,11 @@
         width?: number;
         height?: number;
     };
-    const { width = 800, height = 500 }: TProps = $props();
+    const { width = 800, height = 500, base } = $props<{
+        width?: number;
+        height?: number;
+        base: string;
+    }>();
 
     // Aggregated data structure
     interface LifestyleData {
