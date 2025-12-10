@@ -154,6 +154,13 @@
     drawChart();
   }
 
+  //formats deaths for unreported/0
+  function formatDeaths(n: number | null): string {
+  if (n === null || n === 0) return "0 reported";
+  return n.toLocaleString();
+}
+
+
   // Snap left column to a specific year index
   function snapToYear(idx: number) {
     const cards = leftColumn?.querySelectorAll<HTMLElement>(".year-card");
@@ -315,10 +322,11 @@
             tooltip.style.display = "block";
             const rank = getRankForYear(s.cause, v.year);
 
-          tooltip.innerHTML = `
+            tooltip.innerHTML = `
             <strong>${rank ? `#${rank} — ` : ""}${s.cause}</strong><br>
-            ${v.year}: ${v.deaths!.toLocaleString()} deaths
+            ${v.year}: ${formatDeaths(v.deaths)} deaths
           `;
+
 
 
             const svgRect = svgElement.getBoundingClientRect();
