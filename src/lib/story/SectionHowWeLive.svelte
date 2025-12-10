@@ -1,6 +1,8 @@
 <script lang="ts">
 	import LifestyleScatter from "../LifestyleScatter.svelte";
 	import RiskMeter from "../RiskMeter.svelte";
+	import { base } from "$app/paths";
+    import SectionWhereWeLive from "$lib/story/SectionWhereWeLive.svelte";
 </script>
 
 <section id="lifestyleSection">

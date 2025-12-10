@@ -10,6 +10,9 @@
     import SectionInteractive from "$lib/story/SectionInteractive.svelte";
     import SectionWhereWeLive from "$lib/story/SectionWhereWeLive.svelte";
 
+	import { base } from '$app/paths';
+	import LifestyleScatter from '$lib/LifestyleScatter.svelte';
+
 	// Reactive variable for storing the data
 	let people: Person[] = [];
 	let stateData: StateData[] = [];
@@ -72,7 +75,7 @@
 	<SectionWhoWeAre />
 
 	<!-- Where We Live Section (us map)-->
-	<SectionWhereWeLive {stateData} />
+	<SectionWhereWeLive {stateData} {base}/>
 
 	<!-- Interactive Section (calculator, bar chart?)-->
 	<SectionInteractive {people}/>
