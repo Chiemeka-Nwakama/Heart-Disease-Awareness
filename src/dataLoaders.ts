@@ -58,7 +58,7 @@ export async function loadKaggleCsv(): Promise<Person[]> {
 }
 export async function loadStateData(): Promise<StateData[]>  {
     try {
-      const csvUrl = "/State_Data.csv";
+      const csvUrl = "./State_Data.csv";
       const data = await d3.csv(csvUrl, (row) => {
         // TIP: in row, all values are strings, so we need to use a row conversion function here to format them
         return {
