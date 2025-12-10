@@ -68,7 +68,7 @@
   2019: { 
     leader: "Heart disease", 
     insight: 
-      "Pre-pandemic mortality patterns hold steady. Heart disease and cancer stay dominant, while influenza/pneumonia trends dip and accidents show a small increase."
+      "Pre-pandemic mortality patterns hold steady. Heart disease and cancer stay dominant, while influenza / pneumonia trends dip and accidents show a small increase."
   },
 
   2020: { 
@@ -746,4 +746,5 @@
     }
   }
 </style>
+
 
