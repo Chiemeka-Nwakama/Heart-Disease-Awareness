@@ -1,7 +1,8 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-    export let base;
+    const { base } = $props();
+
 
 
 
