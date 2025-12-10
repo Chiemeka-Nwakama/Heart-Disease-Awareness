@@ -1,14 +1,20 @@
 <script lang="ts">
-	import LifeStyleHeat from "../LifeStyleHeat.svelte";
-	import RiskMeter from "../RiskMeter.svelte";
+	import LifeStyleHeat from '../LifeStyleHeat.svelte';
+	import RiskMeter from '../RiskMeter.svelte';
+	import PieChart from '../PieChart.svelte';
 </script>
 
 <section id="demographicSection">
 	<h2>Who We Are: Does Age or Predisposed Health Conditions Change the Odds?</h2>
-	<p>Let's see how things shift by risk factors. These are a subset of predisposed risk factors an individual may have. This is based on a 100k subset of data from the national BFSS health survey in 2022, openly available on Kaggle. </p>
+	<p>
+		Let's see how things shift by risk factors. These are a subset of predisposed risk factors an
+		individual may have. This is based on a 100k subset of data from the national BFSS health survey
+		in 2022, openly available on Kaggle.
+	</p>
 
 	<div class="viz-placeholder">
 		<!-- <h4>📊 Heart Disease Risk by Demographics</h4> -->
+		<!-- <PieChart /> -->
 		<LifeStyleHeat />
 	</div>
 
@@ -19,15 +25,14 @@
 			<p><strong>Gender:</strong> Male</p>
 			<p><strong>Race:</strong> Black/African American</p>
 			<p>
-				<strong>Family History:</strong> Father had heart attack
-				at 62
+				<strong>Family History:</strong> Father had heart attack at 62
 			</p>
 		</div>
 	</div>
 
 	<div class="viz-placeholder">
 		<h4>⚠️ James's Risk Profile</h4>
-		<RiskMeter 
+		<RiskMeter
 			userName="James"
 			age={68}
 			sex="Male"
@@ -39,9 +44,8 @@
 			hasDiabetes={true}
 		/>
 		<p>
-			<strong>Finding:</strong> People like James face higher risk
-			due to age demographics and genetic factors, with rates 1.5x
-			higher than younger populations.
+			<strong>Finding:</strong> People like James face higher risk due to age demographics and genetic
+			factors, with rates 1.5x higher than younger populations.
 		</p>
 	</div>
 </section>
