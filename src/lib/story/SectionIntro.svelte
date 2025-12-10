@@ -6,10 +6,10 @@
 </script>
 
 <section id="deathCauseSection">
-	<p>
+	<h2 style="text-align: center;">
 		Heart Disease has been the leading cause of death in the U.S. for
 		the last decade.
-	</p>
+	</h2>
 	<div class="viz-placeholder">
 		<!-- <h4> Top 10 Leading Causes of Death in the U.S.</h4>	 -->
 
