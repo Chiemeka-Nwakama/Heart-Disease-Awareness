@@ -56,7 +56,7 @@
   2017: { 
     leader: "Heart disease", 
     insight: 
-      "Heart disease remains the nation's leading killer, with mortality staying well above all other causes. Cancer follows as the second-leading cause." 
+      "Heart disease is the nation's leading killer, with mortality staying well above all other causes. Cancer follows as the second-leading cause." 
   },
 
   2018: { 
@@ -754,5 +754,6 @@
     }
   }
 </style>
+
 
 
