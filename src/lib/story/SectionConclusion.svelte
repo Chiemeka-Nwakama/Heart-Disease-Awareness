@@ -2,10 +2,8 @@
 	<h3>What We Learned</h3>
 	<ol>
 		<li>
-			<strong>Lifestyle is huge:</strong> Exercise and diet quality
-			are among the most powerful modifiable factors, with regular
-			physical activity and healthy eating patterns associated with
-			30-40% risk reduction.
+			<strong>Lifestyle is huge:</strong> Your daily habits and tendencies
+			can play significant roles in your heart health.
 		</li>
 
 		<li>
@@ -42,7 +40,7 @@
 	</p>
 
 	<p>
-		Understanding these patterns isn't just about statistics—it's
+		Understanding these patterns isn't just about statistics; it's
 		about empowering each of us to make informed choices that can add
 		years to our lives and life to our years.
 	</p>
@@ -50,11 +48,13 @@
 
 <footer>
 	<p>
-		Data sources: CDC National Vital Statistics System, American
-		Heart Association, National Health Interview Survey
+		Data sources: <br/>
+		Indicators of Heart Disease (2022 UPDATE) – Kaggle/CDC 2022 Survey, <br/>
+		CDC Heart Disease Deaths by State 2014–2023 – CDC, <br/>
+		U.S. Census Bureau Median Household Income by State 1984–2024 – U.S. Census Bureau
 	</p>
 	<p>
 		An interactive data story exploring heart disease risk factors
-		across America
+		across America.
 	</p>
 </footer>

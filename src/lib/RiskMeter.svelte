@@ -1,9 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { createEventDispatcher } from "svelte";
   import * as d3 from 'd3'; 
   
   // Props for user profile
-  export let userName = "Sarah";
+  export let userName = "";
   export let age = 45;
   export let sex = "Female"; // "Female" or "Male"
   export let race = "White only, Non-Hispanic"; // Match your data categories
@@ -13,6 +14,7 @@
   export let bmi = 23.5;
   export let hasDiabetes = false;
   export let state = ""; // Optional: specific state or leave empty for national
+  export let tryAgain = false;
   
   // Data and calculations
   let loading = true;
@@ -271,6 +273,11 @@
   	const percentage = Math.min(risk / max, 1);
   	return -90 + (percentage * 180);
   }
+
+  const dispatch = createEventDispatcher();
+  function handleTryAgainClick() {
+		dispatch("tryAgain"); // tells parent to reset form
+  }
   
   onMount(() => {
   	loadData();
@@ -283,6 +290,14 @@
 </script>
 
 <div class="risk-meter-container">
+  {#if tryAgain}
+	<div class="try-again">
+		<button class="change-values-button" on:click={handleTryAgainClick}>
+			Change Values
+		</button>
+  	</div>
+  {/if}
+  
   {#if loading}
   	<div class="loading">
   		<div class="spinner"></div>
@@ -295,141 +310,147 @@
   {:else}
   	<div class="meter-header">
   		<h3>{userName}'s Heart Attack Risk</h3>
-  		<p class="subtitle">Compared to national average for {sex.toLowerCase()}s age {age}</p>
+  		<p class="subtitle">Compared to the national averages for {sex.toLowerCase()}s of age {age}</p>
   	</div>
   	
-  	<div class="gauge-container">
-  		<svg viewBox="0 0 200 120" class="gauge-svg">
-  			  			<path
-  				d="M 20 100 A 80 80 0 0 1 180 100"
-  				fill="none"
-  				stroke="#e5e7eb"
-  				stroke-width="20"
-  				stroke-linecap="round"
-  			/>
-  			
-  			  			<path
-  				d="M 20 100 A 80 80 0 0 1 180 100"
-  				fill="none"
-  				stroke="url(#riskGradient)"
-  				stroke-width="20"
-  				stroke-linecap="round"
-  			/>
-  			
-  			  			<defs>
-  				<linearGradient id="riskGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-  					<stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
-  					<stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
-  					<stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" />
-  				</linearGradient>
-  			</defs>
-  			
-  			  			<g transform="translate(100, 100)">
-  				<line
-  					x1="0"
-  					y1="0"
-  					x2="0"
-  					y2="-65"
-  					stroke="#9ca3af"
-  					stroke-width="2"
-  					stroke-dasharray="4,4"
-  					transform="rotate({nationalRotation})"
-  				/>
-  				<circle cx="0" cy="-65" r="4" fill="#9ca3af" transform="rotate({nationalRotation})" />
-  			</g>
-  			
-  			  			<g transform="translate(100, 100)">
-  				<line
-  					x1="0"
-  					y1="0"
-  					x2="0"
-  					y2="-70"
-  					stroke="#3b82f6"
-  					stroke-width="4"
-  					stroke-linecap="round"
-  					transform="rotate({userRotation})"
-  					class="user-needle"
-  				/>
-  				<circle cx="0" cy="0" r="6" fill="#3b82f6" />
-  			</g>
-  			
-  			  			<text x="20" y="115" font-size="10" fill="#6b7280" text-anchor="middle">Low</text>
-  			<text x="100" y="25" font-size="10" fill="#6b7280" text-anchor="middle">Risk</text>
-  			<text x="180" y="115" font-size="10" fill="#6b7280" text-anchor="middle">High</text>
-  		</svg>
-  	</div>
-  	
-  	<div class="risk-stats">
-  		<div class="stat-card user-stat">
-  			<div class="stat-icon">👤</div>
-  			<div class="stat-content">
-  				<div class="stat-label">Your Risk</div>
-  				<div class="stat-value">{(animatedUserRisk * 100).toFixed(2)}%</div>
-  			</div>
-  		</div>
-  		
-  		<div class="stat-card national-stat">
-  			<div class="stat-icon">🌎</div>
-  			<div class="stat-content">
-  				<div class="stat-label">National Avg</div>
-  				<div class="stat-value">{(animatedNationalRisk * 100).toFixed(2)}%</div>
-  			</div>
-  		</div>
-  	</div>
-  	
-  	<div class="risk-summary {riskReduction > 0 ? 'positive' : 'negative'}">
-  		{#if riskReduction > 0}
-  			<div class="summary-icon">✅</div>
-  			<div class="summary-text">
-  				<strong>Great news!</strong> Based on {userName}'s healthy habits, their risk is
-  				<strong>{Math.abs(riskReduction).toFixed(0)}% lower</strong> than the national average.
-  			</div>
-  		{:else}
-  			<div class="summary-icon">⚠️</div>
-  			<div class="summary-text">
-  				<strong>Attention needed:</strong> Current risk is
-  				<strong>{Math.abs(riskReduction).toFixed(0)}% higher</strong> than average. 
-  				Small lifestyle changes could make a big difference.
-  			</div>
-  		{/if}
-  	</div>
-  	
-  	<div class="lifestyle-factors">
-  		<h4>Contributing Factors:</h4>
-  		<div class="factors-grid">
-  			<div class="factor {exercisePerWeek >= 4 ? 'positive' : exercisePerWeek >= 2 ? 'neutral' : 'negative'}">
-  				<span class="factor-icon">🏃</span>
-  				<span class="factor-label">Exercise</span>
-  				<span class="factor-value">{exercisePerWeek}x/week</span>
-  			</div>
-  			
-  			<div class="factor {sleepHours >= 7 && sleepHours <= 8 ? 'positive' : 'neutral'}">
-  				<span class="factor-icon">😴</span>
-  				<span class="factor-label">Sleep</span>
-  				<span class="factor-value">{sleepHours}h</span>
-  			</div>
-  			
-  			<div class="factor {smokerStatus === 'Never smoked' ? 'positive' : 'negative'}">
-  				<span class="factor-icon">🚭</span>
-  				<span class="factor-label">Smoking</span>
-  				<span class="factor-value">{smokerStatus.includes('Never') ? 'Never' : smokerStatus.includes('Former') ? 'Former' : 'Yes'}</span>
-  			</div>
-  			
-  			<div class="factor {bmi >= 18.5 && bmi < 25 ? 'positive' : bmi >= 25 && bmi < 30 ? 'neutral' : 'negative'}">
-  				<span class="factor-icon">⚖️</span>
-  				<span class="factor-label">BMI</span>
-  				<span class="factor-value">{bmi.toFixed(1)}</span>
-  			</div>
-  			
-  			{#if hasDiabetes}
-  			<div class="factor negative">
-  				<span class="factor-icon">💉</span>
-  				<span class="factor-label">Diabetes</span>
-  				<span class="factor-value">Yes</span>
-  			</div>
-  			{/if}
-  		</div>
-  	</div>
+	<div class="risk-two-column">
+		<div class="left-col">
+			<div class="gauge-container">
+				<svg viewBox="0 0 200 120" class="gauge-svg">
+								<path
+						d="M 20 100 A 80 80 0 0 1 180 100"
+						fill="none"
+						stroke="#e5e7eb"
+						stroke-width="20"
+						stroke-linecap="round"
+					/>
+					
+								<path
+						d="M 20 100 A 80 80 0 0 1 180 100"
+						fill="none"
+						stroke="url(#riskGradient)"
+						stroke-width="20"
+						stroke-linecap="round"
+					/>
+					
+								<defs>
+						<linearGradient id="riskGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+							<stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+							<stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
+							<stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" />
+						</linearGradient>
+					</defs>
+					
+								<g transform="translate(100, 100)">
+						<line
+							x1="0"
+							y1="0"
+							x2="0"
+							y2="-65"
+							stroke="#9ca3af"
+							stroke-width="2"
+							stroke-dasharray="4,4"
+							transform="rotate({nationalRotation})"
+						/>
+						<circle cx="0" cy="-65" r="4" fill="#9ca3af" transform="rotate({nationalRotation})" />
+					</g>
+					
+								<g transform="translate(100, 100)">
+						<line
+							x1="0"
+							y1="0"
+							x2="0"
+							y2="-70"
+							stroke="#3b82f6"
+							stroke-width="4"
+							stroke-linecap="round"
+							transform="rotate({userRotation})"
+							class="user-needle"
+						/>
+						<circle cx="0" cy="0" r="6" fill="#3b82f6" />
+					</g>
+					
+								<text x="20" y="115" font-size="10" fill="#6b7280" text-anchor="middle">Low</text>
+					<text x="100" y="25" font-size="10" fill="#6b7280" text-anchor="middle">Risk</text>
+					<text x="180" y="115" font-size="10" fill="#6b7280" text-anchor="middle">High</text>
+				</svg>
+			</div>
+
+			<div class="risk-stats">
+				<div class="stat-card user-stat">
+					<div class="stat-icon">👤</div>
+					<div class="stat-content">
+						<div class="stat-label">Personal Risk</div>
+						<div class="stat-value">{(animatedUserRisk * 100).toFixed(2)}%</div>
+					</div>
+				</div>
+				
+				<div class="stat-card national-stat">
+					<div class="stat-icon">🌎</div>
+					<div class="stat-content">
+						<div class="stat-label">National Avg</div>
+						<div class="stat-value">{(animatedNationalRisk * 100).toFixed(2)}%</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="right-col">
+			<div class="risk-summary {riskReduction > 0 ? 'positive' : 'negative'}">
+				{#if riskReduction > 0}
+					<div class="summary-icon">✅</div>
+					<div class="summary-text">
+						<strong>Great news!</strong> Based on {userName}'s healthy habits, their risk is
+						<strong>{Math.abs(riskReduction).toFixed(0)}% lower</strong> than the national average.
+					</div>
+				{:else}
+					<div class="summary-icon">⚠️</div>
+					<div class="summary-text">
+						<strong>Attention needed:</strong> Current risk is
+						<strong>{Math.abs(riskReduction).toFixed(0)}% higher</strong> than average. 
+						Small lifestyle changes could make a big difference.
+					</div>
+				{/if}
+			</div>
+
+			<div class="lifestyle-factors">
+				<h4>Contributing Factors:</h4>
+				<div class="factors-grid">
+					<div class="factor {exercisePerWeek >= 4 ? 'positive' : exercisePerWeek >= 2 ? 'neutral' : 'negative'}">
+						<span class="factor-icon">🏃</span>
+						<span class="factor-label">Exercise</span>
+						<span class="factor-value">{exercisePerWeek}x/week</span>
+					</div>
+					
+					<div class="factor {sleepHours >= 7 && sleepHours <= 8 ? 'positive' : 'neutral'}">
+						<span class="factor-icon">😴</span>
+						<span class="factor-label">Sleep</span>
+						<span class="factor-value">{sleepHours}h</span>
+					</div>
+					
+					<div class="factor {smokerStatus === 'Never smoked' ? 'positive' : 'negative'}">
+						<span class="factor-icon">🚭</span>
+						<span class="factor-label">Smoking</span>
+						<span class="factor-value">{smokerStatus.includes('Never') ? 'Never' : smokerStatus.includes('Former') ? 'Former' : 'Yes'}</span>
+					</div>
+					
+					<div class="factor {bmi >= 18.5 && bmi < 25 ? 'positive' : bmi >= 25 && bmi < 30 ? 'neutral' : 'negative'}">
+						<span class="factor-icon">⚖️</span>
+						<span class="factor-label">BMI</span>
+						<span class="factor-value">{bmi.toFixed(1)}</span>
+					</div>
+					
+					{#if hasDiabetes}
+					<div class="factor negative">
+						<span class="factor-icon">💉</span>
+						<span class="factor-label">Diabetes</span>
+						<span class="factor-value">Yes</span>
+					</div>
+					{/if}
+				</div>
+			</div>
+		</div>
+	</div>
   {/if}
 </div>
 
@@ -440,7 +461,7 @@
   	padding: 2rem;
   	color: white;
   	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  	max-width: 600px;
+  	max-width: 100%;
   	margin: 0 auto;
   }
   
@@ -472,12 +493,14 @@
   	margin: 0 0 0.5rem 0;
   	font-size: 1.75rem;
   	font-weight: 700;
+	color: whitesmoke;
   }
   
   .subtitle {
   	margin: 0;
   	opacity: 0.9;
   	font-size: 0.95rem;
+	color: whitesmoke;
   }
   
   .gauge-container {
@@ -545,7 +568,7 @@
   	background: rgba(255, 255, 255, 0.15);
   	backdrop-filter: blur(10px);
   	border-radius: 12px;
-  	padding: 1.25rem;
+  	padding: 1rem;
   	display: flex;
   	gap: 1rem;
   	align-items: start;
@@ -633,6 +656,55 @@
   	font-weight: 600;
   }
   
+  .risk-two-column {
+		display: grid;
+		grid-template-columns: 1fr 1.3fr; /* adjust proportion as desired */
+		gap: 2rem;
+		align-items: stretch;
+	}
+
+	.left-col {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+
+	}
+
+	.right-col > * {
+		margin-bottom: 1.25rem;
+	}
+
+	.change-values-button {
+    padding: 0.6rem 1.4rem;
+    background: linear-gradient(135deg, #14b8a6, #0f766e); 
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .change-values-button:hover {
+    background: linear-gradient(135deg, #0f766e, #115e59);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  }
+
+  .change-values-button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  }
+
+	@media (max-width: 768px) {
+		.risk-two-column {
+			grid-template-columns: 1fr; /* stack on mobile */
+		}
+	}
+
   @media (max-width: 640px) {
   	.risk-meter-container {
   		padding: 1.5rem;

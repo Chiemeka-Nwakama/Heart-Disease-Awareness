@@ -6,7 +6,7 @@
 
 <section id="demographicSection">
 	<h2>
-		Who We Are: Does Age or Predisposed Health Conditions Change the Odds?
+		Who We Are: Do Biological and Health Factors Change the Odds?
 	</h2>
 	<p>
 		Let's see how things shift by risk factors. These are a subset of
@@ -21,20 +21,14 @@
 		<LifeStyleHeat />
 	</div>
 
-	<div class="person-card">
-		<h4>Meet James, 68</h4>
-		<div class="details">
-			<p><strong>Age:</strong> 68 years old</p>
-			<p><strong>Gender:</strong> Male</p>
-			<p><strong>Race:</strong> Black/African American</p>
-			<p>
-				<strong>Family History:</strong> Father had heart attack at 62
-			</p>
-		</div>
-	</div>
-
 	<div class="viz-placeholder">
-		<h4>⚠️ James's Risk Profile</h4>
+		<div class="person-card">
+			<h4>Meet James, 68</h4>
+				<div class="details">
+					<p>James is a 68-year-old Black/African American man with a family history of heart disease—his father had a heart attack at 62. He is a former smoker, has diabetes, and does not currently exercise.</p>
+				</div>
+		</div>
+
 		<RiskMeter
 			userName="James"
 			age={68}
@@ -46,10 +40,5 @@
 			bmi={32.5}
 			hasDiabetes={true}
 		/>
-		<p>
-			<strong>Finding:</strong> People like James face higher risk due to
-			age demographics and genetic factors, with rates 1.5x higher than
-			younger populations.
-		</p>
 	</div>
 </section>

@@ -1,29 +1,87 @@
 <script lang="ts">
-	import type { Person } from "../../types";
-	import GroupedBar from "../GroupedBar.svelte";
+    import RiskForm from "$lib/RiskForm.svelte";
+	import RiskMeter from "$lib/RiskMeter.svelte";
 
-	export let people: Person[] = [];
+	let formData: { 
+		userName: any; 
+		age: any; 
+		sex: any; 
+		race: any; 
+		exercisePerWeek: any; 
+		sleepHours: any; 
+		smokerStatus: any; 
+		bmi: any; 
+		hasDiabetes: any; 
+		state: any; 
+	} | null = null;
+
+	function handleFormSubmit(
+		event: { 
+			detail: 
+				{ 
+					userName: any; 
+					age: any; 
+					sex: any; 
+					race: any; 
+					exercisePerWeek: any; 
+					sleepHours: any; 
+					smokerStatus: any; 
+					bmi: any; 
+					hasDiabetes: any; 
+					state: any; 
+				} | null; 
+			}
+	) {
+		formData = event.detail; // contains everything from the form
+		console.log(formData)
+	}
+
+	function handleTryAgain() {
+		formData = null;
+	}
 </script>
 
+<style>
+	.disclaimer {
+		font-size: 0.85rem;
+		color: #6b7280; /* gray */
+		font-style: italic;
+		margin-top: 0.5rem;
+	}
+
+</style>
+
+
 <section>
-	<h2>What If They Changed a Few Things?</h2>
+	<h2>What If A Few Things Changed?</h2>
 	<p>
-		A few small changes can make a big difference. See how modifying
-		lifestyle factors could impact risk.
+		Small changes can make a big difference. Explore how different factors could impact risk.
+	</p>
+	<p class="disclaimer">
+		This calculator is based on statistical data from a specific dataset and is intended for informational purposes only. 
+		It does not constitute medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional 
+		for personal medical guidance.
 	</p>
 
 	<div class="viz-placeholder">
 		<h4>🎛️ Risk Calculator</h4>
-		<p>
-			Interactive tool with sliders/toggles to adjust:<br />
-			• Exercise frequency (0-7 days/week)<br />
-			• Smoking status (current/former/never)<br />
-			• Diet quality (poor/fair/good/excellent)<br />
-			• Sleep hours (4-10 hours)<br />
-			• BMI range<br /><br />
-			Real-time risk score updates as user adjusts factors, showing
-			percentage change from baseline.
-		</p>
+		{#if !formData}
+			<RiskForm on:submit={handleFormSubmit} />
+		{:else}
+			<RiskMeter
+				userName={formData.username}
+				age={formData.age}
+				sex={formData.sex}
+				race={formData.race}
+				exercisePerWeek={formData.exercisePerWeek}
+				sleepHours={formData.sleepHours}
+				smokerStatus={formData.smokerStatus}
+				bmi={formData.bmi}
+				hasDiabetes={formData.hasDiabetes}
+				state={formData.state}
+				tryAgain={true}
+				on:tryAgain={handleTryAgain}
+			/>
+		{/if}
 	</div>
-	
 </section>

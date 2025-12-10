@@ -9,7 +9,7 @@
 <section id="locationSection">
 		<h2>Where We Live: Does Your State Make a Difference?</h2>
 		<p>
-			Heart health looks different in different corners of the country.
+			Heart health looks different in different corners of the country. Let's take a look at some possible connections.
 		</p>
 
 		<div class="viz-placeholder">
@@ -25,26 +25,13 @@
 			<USCorrelationMap data={stateData} />
 		</div>
 
-		<div class="person-card">
-			<h4>Meet Maria, 52</h4>
-			<div class="details">
-				<p><strong>Location:</strong> Rural Mississippi</p>
-				<p>
-					<strong>Healthcare Access:</strong> 45 minutes to nearest
-					cardiac center
-				</p>
-				<p>
-					<strong>Environment:</strong> Limited access to fresh produce,
-					few exercise facilities
-				</p>
-				<p>
-					<strong>Lifestyle:</strong> Sedentary job, high-stress
-				</p>
-			</div>
-		</div>
-
 		<div class="viz-placeholder">
-			<h4>📍 Maria's Geographic Risk</h4>
+			<div class="person-card">
+				<h4>Meet Maria, 52</h4>
+					<div class="details">
+						<p>Maria is a 52-year-old living in rural Mississippi. She is 45 minutes from the nearest cardiac center, has limited access to fresh produce and exercise facilities, and works a sedentary, high-stress job.</p>
+					</div>
+			</div>
 			<RiskMeter 
 				userName="Maria"
 				age={52}
@@ -57,10 +44,5 @@
 				hasDiabetes={false}
 				state="Mississippi"
 			/>
-			<p>
-				<strong>Finding:</strong> Maria's story mirrors what the data
-				show: both access to healthcare and lifestyle factors shaped
-				by location matter significantly.
-			</p>
 		</div>
 	</section>

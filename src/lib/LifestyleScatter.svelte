@@ -509,7 +509,7 @@
             </div>
         {:else}
             <div class="placeholder-prompt">
-                <p>💡 <strong>Click any state</strong> on the chart above to see detailed statistics</p>
+                <p>💡 <strong>Click any point</strong> on the chart above to see detailed statistics about the state it represents</p>
             </div>
         {/if}
     {/if}
