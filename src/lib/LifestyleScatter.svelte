@@ -79,7 +79,7 @@
         try {
             // 1. Load state mortality/socioeconomic data
             // Use d3.csv and manually parse relevant fields
-            const stateData: any[] = await d3.csv('../State_Data.csv');
+            const stateData: any[] = await d3.csv('/State_Data.csv');
 
             stateData.forEach(stateObj => {
                 // Ensure stateObj.StateName exists and isn't empty/invalid
