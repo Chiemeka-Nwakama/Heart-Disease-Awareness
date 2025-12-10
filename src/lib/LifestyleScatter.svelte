@@ -1,6 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
+    import { base } from '$app/paths';
+
+
 
     type TProps = {
         width?: number;
@@ -79,7 +82,7 @@
         try {
             // 1. Load state mortality/socioeconomic data
             // Use d3.csv and manually parse relevant fields
-            const stateData: any[] = await d3.csv('/State_Data.csv');
+            const stateData: any[] = await d3.csv( `${base}/State_Data.csv`);
 
             stateData.forEach(stateObj => {
                 // Ensure stateObj.StateName exists and isn't empty/invalid
@@ -106,7 +109,7 @@
             });
 
             // 2. Load lifestyle data
-            const lifestyleData: any[] = await d3.csv('/website_summary_data.csv');
+            const lifestyleData: any[] = await d3.csv(`${base}/website_summary_data.csv`);
 
             // Aggregate by state (same logic as before, but using d3.csv output)
             const stateAggregates = new Map<string, any>();
