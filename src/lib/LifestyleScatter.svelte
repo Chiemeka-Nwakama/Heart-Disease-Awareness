@@ -679,6 +679,7 @@
     .placeholder-prompt p {
         margin: 0;
         font-size: 16px;
+        color: white;
     }
     .state-factsheet {
         background: white;

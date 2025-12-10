@@ -26,9 +26,41 @@
 </script>
 
 <div class="container">
-	<header>
-		<h1>THE STATES OF OUR HEARTS</h1>
-	</header>
+<header class="title-column">
+	<h1>THE STATES OF OUR HEARTS</h1>
+
+	<div class="ekg-row">
+
+		<div class="ekg-box">
+			<svg class="ekg" viewBox="0 0 600 120">
+				<path class="ekg-line" d="M0 60 L80 60 L100 40 L120 90 L140 60 L220 60 L240 50 L260 70 L280 60 L360 60 L380 40 L400 90 L420 60 L600 60"/>
+			</svg>
+	
+			
+			<svg class="heart-icon beating-heart" viewBox="0 0 24 24">
+				<path d="
+					M12 21
+					C5 14, 2 10, 2 6.5
+					C2 4, 4 2.5, 6.2 2.5
+					C8 2.5, 9.5 3.7, 12 6
+					C14.5 3.7, 16 2.5, 17.8 2.5
+					C20 2.5, 22 4, 22 6.5
+					C22 10, 19 14, 12 21
+				" />
+
+			</svg>
+	
+		</div>
+	
+	</div>
+	
+
+
+</header>
+
+	
+	
+	
 
 	<!-- Introduction (line chart, leading cause of deaths) -->
 	<SectionIntro {cause_Of_Death} />

@@ -10,8 +10,8 @@
 body {
     font-family: "Merriweather", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
-    color: #e4e4e7;
-    background-color: #0a0a0b;
+    color: #1e293b; /* slate-800 */
+    background-color:  #0a0a0b;
 }
 
 .container {
@@ -20,58 +20,61 @@ body {
     padding: 2rem 1rem;
 }
 
+/* HEADER */
+
 header {
     text-align: center;
     padding: 60px 0 1px;
-    position: relative;
 }
 
 h1 {
     font-size: 3em;
     font-weight: 700;
-    color: #ff6b6b;
+    color: #2563eb; /* blue-600 */
     margin-bottom: 20px;
     letter-spacing: -1px;
-    position: relative;
-    z-index: 2;
 }
 
 .subtitle {
     font-size: 1.3em;
-    color: #a1a1aa;
+    color: #475569; /* slate-600 */
     margin-bottom: 15px;
 }
 
+/* SECTIONS  */
+
 section {
-    background: #18181b;
+    background: #f8fafc; /* light gray-blue */
     padding: 40px;
     margin: 30px 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    border: 1px solid #27272a;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: 1px solid #e2e8f0; /* soft border */
 }
 
 h2 {
     font-size: 2em;
-    color: #ff6b6b;
+    color: #2563eb;
     margin-bottom: 20px;
 }
 
 h3 {
     font-size: 1.5em;
-    color: #d4d4d8;
+    color: #334155; /* slate-700 */
     margin: 30px 0 15px;
 }
 
 p {
     font-size: 1.1em;
     margin-bottom: 15px;
-    color: #a1a1aa;
+    color: #475569; /* slate-600 */
 }
 
+/* VISUALIZATION BOX  */
+
 .viz-placeholder {
-    background: linear-gradient(135deg, #27272a 0%, #1c1c1f 100%);
-    border: 2px dashed #ff6b6b;
+    background: #f1f5f9; /* slate-100 */
+    border: 2px dashed #2563eb;
     border-radius: 8px;
     padding: 60px 40px;
     margin: 30px 0;
@@ -80,66 +83,287 @@ p {
 
 .viz-placeholder h4 {
     font-size: 1.3em;
-    color: #ff6b6b;
+    color: #2563eb;
     margin-bottom: 10px;
 }
 
 .viz-placeholder p {
-    color: #a1a1aa;
+    color: #475569;
     font-size: 1em;
     margin: 0;
 }
 
+/* PERSON CARDS */
+
 .person-card {
-    background: #292524;
-    border-left: 4px solid #fb923c;
+    background: #f1f5f9;
+    border-left: 4px solid #2563eb;
     padding: 25px;
     margin: 25px 0;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 .person-card h4 {
     font-size: 1.3em;
-    color: #fb923c;
+    color: #2563eb;
     margin-bottom: 10px;
 }
 
 .person-card .details {
     font-size: 1em;
-    color: #d4d4d8;
+    color: #334155;
     line-height: 1.8;
 }
 
 .person-card .details p {
-    color: #d4d4d8;
+    color: #334155;
 }
 
+/* KEY FINDINGS  */
+
 .key-findings {
-    background: #1e293b;
+    background: #eff6ff; /* blue-50 */
     padding: 30px;
     border-radius: 8px;
     margin: 30px 0;
-    border: 1px solid #334155;
+    border: 1px solid #93c5fd; /* blue-300 */
 }
 
 .key-findings h3 {
-    color: #60a5fa;
+    color: #2563eb;
     margin-top: 0;
 }
 
 .key-findings ol {
     margin-left: 20px;
     font-size: 1.1em;
-    color: #cbd5e1;
+    color: #1e293b;
 }
 
 .key-findings li {
     margin: 15px 0;
 }
 
+
+
+/* FOOTER  */
+
 footer {
     text-align: center;
     padding: 40px 0;
-    color: #71717a;
+    color: #64748b; /* slate-500 */
     font-size: 0.9em;
 }
+
+/* GLOBAL TRANSITIONS & ANIMATIONS */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Smooth fade-in when section enters viewport */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Subtle shadow animation on hover for white boxes */
+section:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Header parallax/slide-in effect */
+header {
+    animation: fadeDown 1.2s ease both;
+}
+
+@keyframes fadeDown {
+    0% { opacity: 0; transform: translateY(-30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Smooth color transitions on all text and backgrounds */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Subtle blue border glow on visualization placeholder */
+.viz-placeholder:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.5);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+
+.intro-text {
+	color: white; /* paragraph text */
+}
+
+.intro-text a {
+	color: #3b82f6; /* link color (blue) */
+}
+
+.intro-text a:hover {
+	color: #a5d8ff;
+	text-decoration: underline;
+}
+/* Layout */
+.title-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+/* EKG Line */
+.ekg {
+    width: 90%;
+    max-width: 700px;
+    height: 80px;
+    overflow: visible;
+}
+
+.ekg-line {
+    fill: none;
+    stroke: #2563eb;
+    stroke-width: 4;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+
+    /* Glow effect */
+    filter: drop-shadow(0 0 8px #2563eb);
+
+    /* Animation */
+    stroke-dasharray: 1200;
+    stroke-dashoffset: 1200;
+    animation: ekg-draw 2.2s linear infinite;
+}
+
+/* EKG Box Container */
+.ekg-box {
+    position: relative;           /* required to place heart inside */
+    width: 90%;
+    max-width: 400px;
+    height: 90px;
+    padding: 12px 18px;
+
+    border: 3px solid #2563eb;
+    border-radius: 12px;
+    background: rgba(37, 99, 235, 0.05);
+    box-shadow: 0 0 18px rgba(37, 99, 235, 0.25);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    margin-top: -10px;
+}
+
+/* Heart outline inside box */
+.heart-outline {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+
+    width: 32px;
+    height: 32px;
+}
+
+.heart-outline::before,
+.heart-outline::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 16px;
+    height: 24px;
+    border: 3px solid #2563eb;
+    border-radius: 16px 16px 0 0;
+}
+
+.heart-outline::before {
+    left: 0;
+    transform: rotate(-45deg);
+    border-right: none;
+    border-bottom: none;
+}
+
+.heart-outline::after {
+    right: 0;
+    transform: rotate(45deg);
+    border-left: none;
+    border-bottom: none;
+}
+
+/* Row layout for heart + EKG */
+.ekg-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.heart-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 14px;
+
+    width: 26px;   /* slightly smaller, cleaner */
+    height: 26px;
+
+    fill: #2563eb;
+    stroke: #2563eb;
+    stroke-width: 1.7;        /* was 2.8 — now thin + elegant */
+    stroke-linecap: round;     /* smoother curves */
+    stroke-linejoin: round;
+
+    filter: drop-shadow(0 0 4px #2563eb); /* softer glow */
+}
+
+
+
+/* Beat animation */
+.beating-heart {
+    animation: heart-beat 2.2s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes heart-beat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    20% {
+        transform: scale(1.15);
+    }
+    40% {
+        transform: scale(0.92);
+    }
+    60% {
+        transform: scale(1.12);
+    }
+    80% {
+        transform: scale(0.97);
+    }
+}
+
+
+
+
+
+
+
+@keyframes ekg-draw {
+    0% {
+        stroke-dashoffset: 1200;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+

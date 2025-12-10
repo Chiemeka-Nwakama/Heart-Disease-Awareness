@@ -68,19 +68,19 @@
   2019: { 
     leader: "Heart disease", 
     insight: 
-      "Pre-pandemic mortality patterns hold steady. Heart disease and cancer stay dominant, while influenza / pneumonia trends dip and accidents show a small increase."
+      "Pre-pandemic mortality patterns hold steady. Heart disease and cancer stay dominant, while influenza / pneumonia trends dip and accidents see a small increase."
   },
 
   2020: { 
     leader: "Heart disease", 
     insight: 
-      "The emergence of COVID-19 dramatically reshapes national mortality. COVID-19 becomes a top cause of death, surpassing cancer temporarily." 
+      "The emergence of COVID-19 dramatically reshapes national mortality. COVID-19 becomes the new second leading cause of death, temporarily surpassing cancer place it at 3rd." 
   },
 
   2021: { 
     leader: "Heart disease", 
     insight: 
-    "Despite the vaccine's release in late 2020, COVID-19 reaches peak mortality. Deaths from accidents, diabetes, Alzheimer’s, and liver disease also rise, contributing to higher overall mortality."
+    "Despite the vaccine's release in late 2020, COVID-19 reaches peak mortality. Deaths from accidents, diabetes, Alzheimer's, and liver disease also rise, contributing to higher overall mortality."
   },
 
  
@@ -89,7 +89,7 @@
     2022: {
       leader: "Heart disease",
       insight:
-      "While Covid finally declines following the rollout of vaccines, heart disease remains the leading cause of death, affecting hundreds of thousands."
+      "While Covid finally declines following the rollout of vaccines, heart disease throughout the years remains the leading cause of death, affecting hundreds of thousands."
     }
   };
 

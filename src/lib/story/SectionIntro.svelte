@@ -11,14 +11,14 @@
 		the last decade.
 	</p>
 	<div class="viz-placeholder">
-		<!-- <h4>📊 Top 10 Leading Causes of Death in the U.S.</h4>	 -->
+		<!-- <h4> Top 10 Leading Causes of Death in the U.S.</h4>	 -->
 
 		<LineChartDeath data={cause_Of_Death} />
 
 	</div>
 </section>
 
-<p>
+<p class="intro-text">
 	We looked at data on
 	<a href="#lifestyleSection">lifestyle</a>,
 	<a href="#demographicSection">demographics</a>, and
