@@ -14,11 +14,7 @@
 		<!-- <h4>📊 Top 10 Leading Causes of Death in the U.S.</h4>	 -->
 
 		<LineChartDeath data={cause_Of_Death} />
-		<p>
-			Bar chart or horizontal stacked visualization showing heart
-			disease at #1, followed by cancer, COVID-19, accidents,
-			stroke, etc.
-		</p>
+
 	</div>
 </section>
 
