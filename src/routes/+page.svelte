@@ -9,9 +9,7 @@
     import SectionConclusion from "$lib/story/SectionConclusion.svelte";
     import SectionInteractive from "$lib/story/SectionInteractive.svelte";
     import SectionWhereWeLive from "$lib/story/SectionWhereWeLive.svelte";
-
-	import { base } from '$app/paths';
-	import LifestyleScatter from '$lib/LifestyleScatter.svelte';
+	import { base } from "$app/paths";
 
 	// Reactive variable for storing the data
 	let people: Person[] = [];
@@ -69,13 +67,13 @@
 	<SectionIntro {cause_Of_Death} />
 
     <!-- How We Live Section (scatter plot, correlation between lifestyle factors) -->
-    <SectionHowWeLive />
+    <SectionHowWeLive {base} />
 
 	<!-- Who We Are Section (heatmap) -->
 	<SectionWhoWeAre />
 
 	<!-- Where We Live Section (us map)-->
-	<SectionWhereWeLive {stateData} {base}/>
+	<SectionWhereWeLive {stateData} />
 
 	<!-- Interactive Section (calculator, bar chart?)-->
 	<SectionInteractive {people}/>

@@ -1,8 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-   
-
+  
 
 
 
@@ -15,6 +14,7 @@
         height?: number;
         base: string;
     }>();
+
 
     // Aggregated data structure
     interface LifestyleData {

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import LifestyleScatter from "../LifestyleScatter.svelte";
 	import RiskMeter from "../RiskMeter.svelte";
-	import { base } from "$app/paths";
-    import SectionWhereWeLive from "$lib/story/SectionWhereWeLive.svelte";
+
+	
+    const { base } = $props<{ base: string }>();
 </script>
 
 <section id="lifestyleSection">
@@ -12,7 +13,7 @@
 	<div class="viz-placeholder">
 		<h4>📈 Lifestyle Factors & Heart Disease Risk</h4>
 		<p>Interactive visualization showing correlation between lifestyle factors (exercise frequency, diet quality, smoking status, sleep hours) and heart disease rates. Could be scatter plots, connected dot plots, or small multiples.</p>
-		<LifestyleScatter/>
+		<LifestyleScatter {base}/>
 	</div>
 
 	<div class="person-card">
