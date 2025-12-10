@@ -12,7 +12,6 @@
 
     const { data, width = 800, height = 500 }: TProps = $props();
     
-    let colorBy: "RATE" | "Median202224" | "DEATHS" = $state("DEATHS");
     let usData: any = $state(null);
     let tooltip: { x: number; y: number; content: string } | null = $state(null);
     let selectedState: StateData | null = $state(null);
@@ -55,32 +54,37 @@
     // Create path generator
     const path = $derived(() => d3.geoPath().projection(projection()));
 
-    // Color scale based on selected attribute
-    const colorScale = $derived(() => {
-        if (!data || data.length === 0) return null;
+    // Bivariate color scheme (3x3 grid)
+    // Rows = Mortality Rate (low to high, bottom to top)
+    // Cols = Deaths (low to high, left to right)
+    const bivariateColors = [
+        ['#e8e8e8', '#b8d6be', '#73ae80'], // Low mortality
+        ['#b8b3d2', '#90b2b3', '#5a9178'], // Medium mortality
+        ['#8b62ac', '#7c7088', '#567867']  // High mortality
+    ];
 
-        const values = data.map((d) => {
-            if (colorBy === "RATE") return d.MortalityRate;
-            if (colorBy === "Median202224") return d.IncMedian202224;
-            return d.DeathCount;
-        });
+    // Get quantile class (0, 1, or 2) for a value
+    const getQuantileClass = (value: number, values: number[]): number => {
+        const sorted = [...values].sort((a, b) => a - b);
+        const q1 = d3.quantile(sorted, 0.33) || 0;
+        const q2 = d3.quantile(sorted, 0.67) || 0;
+        if (value <= q1) return 0;
+        if (value <= q2) return 1;
+        return 2;
+    };
 
-        const extent = d3.extent(values) as [number, number];
+    // Get all values for classification
+    const deathValues = $derived(() => data.map(d => d.DeathCount));
+    const rateValues = $derived(() => data.map(d => d.MortalityRate));
 
-        if (colorBy === "RATE") {
-            return d3.scaleSequential(d3.interpolateReds).domain(extent);
-        } else if (colorBy === "Median202224") {
-            return d3.scaleSequential(d3.interpolateGreens).domain(extent);
-        } else {
-            return d3.scaleSequential(d3.interpolateOranges).domain(extent);
-        }
-    });
-
-    function getColorValue(stateData: StateData | undefined): number {
-        if (!stateData) return 0;
-        if (colorBy === "RATE") return stateData.MortalityRate;
-        if (colorBy === "Median202224") return stateData.IncMedian202224;
-        return stateData.DeathCount;
+    // Get bivariate color for a state
+    function getBivariateColor(stateData: StateData | undefined): string {
+        if (!stateData) return '#e0e0e0';
+        
+        const deathClass = getQuantileClass(stateData.DeathCount, deathValues());
+        const rateClass = getQuantileClass(stateData.MortalityRate, rateValues());
+        
+        return bivariateColors[rateClass][deathClass];
     }
 
     function handleMouseEnter(feature: any, event: MouseEvent) {
@@ -114,14 +118,9 @@
 <div class="container">
     
     <div class="controls">
-        <label>
-            <span>Color by:</span>
-            <select bind:value={colorBy}>
-                <option value="DEATHS">Total Deaths</option>
-                <option value="RATE">Mortality Rate</option>
-                <option value="Median202224">Median Income (Adjusted for inflation to 2024 Dollars) </option>
-            </select>
-        </label>
+        <div class="bivariate-label">
+            Bivariate Choropleth: Total Deaths × Mortality Rate
+        </div>
     </div>
 
     {#if usData}
@@ -136,7 +135,7 @@
                     <path
                         class="state"
                         d={path()(feature)}
-                        fill={stateData ? colorScale()(getColorValue(stateData)) : "#e0e0e0"}
+                        fill={getBivariateColor(stateData)}
                         stroke={isSelected ? "#000" : "#fff"}
                         stroke-width={isSelected ? 2 : 0.5}
                         opacity={stateData ? (isSelected ? 1 : 0.85) : 0.3}
@@ -197,50 +196,32 @@
         </div>
     {/if}
 
-    <!-- Legend -->
+    <!-- Bivariate Legend -->
     <div class="legend">
         <div class="legend-title">
-            {#if colorBy === "RATE"}
-                Mortality Rate (per 100,000)
-            {:else if colorBy === "Median202224"}
-                Median Income (2022-2024)
-            {:else}
-                Total Deaths
-            {/if}
+            Bivariate Legend
         </div>
-        <div class="legend-gradient">
-            <svg width="300" height="30">
-                <defs>
-                    <linearGradient id="legendGradient">
-                        {#if colorScale()}
-                            {@const minVal = d3.min(data.map(d => colorBy === "RATE" ? d.MortalityRate : colorBy === "Median202224" ? d.IncMedian202224 : d.DeathCount)) || 0}
-                            {@const maxVal = d3.max(data.map(d => colorBy === "RATE" ? d.MortalityRate : colorBy === "Median202224" ? d.IncMedian202224 : d.DeathCount)) || 0}
-                            <stop offset="0%" stop-color={colorScale()(minVal)} />
-                            <stop offset="100%" stop-color={colorScale()(maxVal)} />
-                        {/if}
-                    </linearGradient>
-                </defs>
-                <rect width="300" height="20" fill="url(#legendGradient)" stroke="#ccc" />
-            </svg>
-            <div class="legend-labels">
-                <span>
-                    {#if colorBy === "RATE"}
-                        {d3.min(data.map(d => d.MortalityRate))?.toFixed(1)}
-                    {:else if colorBy === "Median202224"}
-                        ${formatNumber(d3.min(data.map(d => d.IncMedian202224)) || 0)}
-                    {:else}
-                        {formatNumber(d3.min(data.map(d => d.DeathCount)) || 0)}
-                    {/if}
-                </span>
-                <span>
-                    {#if colorBy === "RATE"}
-                        {d3.max(data.map(d => d.MortalityRate))?.toFixed(1)}
-                    {:else if colorBy === "Median202224"}
-                        ${formatNumber(d3.max(data.map(d => d.IncMedian202224)) || 0)}
-                    {:else}
-                        {formatNumber(d3.max(data.map(d => d.DeathCount)) || 0)}
-                    {/if}
-                </span>
+        <div class="legend-content">
+            <div class="legend-grid-container">
+                <div class="y-axis-label">
+                    <span>High</span>
+                    <span class="axis-title">Mortality Rate</span>
+                    <span>Low</span>
+                </div>
+                <div class="legend-main">
+                    <div class="legend-grid">
+                        {#each bivariateColors.slice().reverse() as row, i}
+                            {#each row as color, j}
+                                <div class="legend-cell" style="background-color: {color};"></div>
+                            {/each}
+                        {/each}
+                    </div>
+                    <div class="x-axis-label">
+                        <span>Low</span>
+                        <span class="axis-title">Total Deaths</span>
+                        <span>High</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="legend-note">
@@ -270,20 +251,10 @@
         margin-bottom: 20px;
     }
 
-    .controls label {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
+    .bivariate-label {
         font-weight: bold;
-        font-size: 16px;
-    }
-
-    .controls select {
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-        cursor: pointer;
+        font-size: 18px;
+        color: #333;
     }
 
     .map-container {
@@ -372,21 +343,73 @@
     }
 
     .legend-title {
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         font-weight: bold;
-        font-size: 14px;
+        font-size: 16px;
     }
 
-    .legend-gradient {
-        display: inline-block;
+    .legend-content {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
     }
 
-    .legend-labels {
+    .legend-grid-container {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .y-axis-label {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        font-size: 11px;
+        color: #666;
+        height: 120px;
+        text-align: right;
+    }
+
+    .y-axis-label .axis-title {
+        font-weight: bold;
+        font-size: 12px;
+        color: #333;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        transform: rotate(180deg);
+    }
+
+    .legend-main {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .legend-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 40px);
+        grid-template-rows: repeat(3, 40px);
+        gap: 1px;
+        border: 1px solid #999;
+    }
+
+    .legend-cell {
+        width: 100%;
+        height: 100%;
+    }
+
+    .x-axis-label {
         display: flex;
         justify-content: space-between;
-        margin-top: 5px;
-        font-size: 12px;
+        font-size: 11px;
         color: #666;
+        padding: 0 5px;
+    }
+
+    .x-axis-label .axis-title {
+        font-weight: bold;
+        font-size: 12px;
+        color: #333;
     }
 
     .legend-note {
