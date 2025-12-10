@@ -35,6 +35,7 @@
         prevalenceAlcoholDrinkers: number;
         prevalenceCOPD: number;
         prevalenceDepression: number;
+        avgPhysicalActivity: number;
     }
 
     let data: LifestyleData[] = $state([]);
@@ -49,13 +50,7 @@
         { value: 'avgSleepHours', label: 'Average Sleep Hours', category: 'Lifestyle' },
         { value: 'avgSmokerScore', label: 'Smoking Status Score', category: 'Lifestyle' },
         { value: 'prevalenceAlcoholDrinkers', label: 'Alcohol Consumption Rate', category: 'Lifestyle' },
-    ];
-    const socioeconomicMetrics = [
-        { value: 'medianIncome', label: 'Median Income', category: 'Socioeconomic' },
-        { value: 'unemploymentRate', label: 'Unemployment Rate', category: 'Socioeconomic' },
-        { value: 'bachelorsRate', label: 'Bachelor\'s Degree Rate', category: 'Socioeconomic' },
-        { value: 'uninsured1934Rate', label: 'Uninsured Rate (19-34)', category: 'Socioeconomic' },
-        { value: 'uninsured3564Rate', label: 'Uninsured Rate (35-64)', category: 'Socioeconomic' },
+        { value: 'avgPhysicalActivity', label: 'Physical Activity Score', category: 'Lifestyle' },
     ];
     const healthMetrics = [
         { value: 'prevalenceDiabetes', label: 'Diabetes Prevalence', category: 'Health' },
@@ -68,7 +63,7 @@
         { value: 'prevalenceStroke', label: 'Stroke Prevalence', category: 'Outcome' },
     ];
 
-    const allXMetrics = [...lifestyleMetrics, ...socioeconomicMetrics, ...healthMetrics];
+    const allXMetrics = [...lifestyleMetrics, ...healthMetrics];
     const allYMetrics = [...outcomeMetrics];
 
     let xMetric = $state('avgBMI');
@@ -135,6 +130,7 @@
                         totalAlcohol: 0,
                         totalCOPD: 0,
                         totalDepression: 0,
+                        totalPhysicalActivity: 0,
                     });
                 }
 
@@ -325,11 +321,6 @@
                 <select bind:value={xMetric}>
                     <optgroup label="Lifestyle Factors">
                         {#each lifestyleMetrics as metric}
-                            <option value={metric.value}>{metric.label}</option>
-                        {/each}
-                    </optgroup>
-                    <optgroup label="Socioeconomic Factors">
-                        {#each socioeconomicMetrics as metric}
                             <option value={metric.value}>{metric.label}</option>
                         {/each}
                     </optgroup>
