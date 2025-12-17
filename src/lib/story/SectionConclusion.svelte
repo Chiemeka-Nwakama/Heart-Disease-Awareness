@@ -68,9 +68,9 @@
 	  
 
 	<p>
-		Acknowledgements:
-		Created by: Chiemeka Nwakama, Emmanuel Mongare, Ibrahim Ismail-Adebiyi, Julia Christenson, Lily Li
-		Special Thanks to Professor Zhu-Tian Chen 
+		<br/>Acknowledgements:
+		<br/>Created by: Chiemeka Nwakama, Emmanuel Mongare, Ibrahim Ismail-Adebiyi, Julia Christenson, Lily Li
+		<br/>Special Thanks to Professor Zhu-Tian Chen 
 	</p>
 	<p>
 		An interactive data story exploring heart disease risk factors
