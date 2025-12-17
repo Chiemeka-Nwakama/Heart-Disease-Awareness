@@ -48,10 +48,29 @@
 
 <footer>
 	<p>
-		Data sources: <br/>
-		Indicators of Heart Disease (2022 UPDATE) – Kaggle/CDC 2022 Survey, <br/>
-		CDC Heart Disease Deaths by State 2014–2023 – CDC, <br/>
-		U.S. Census Bureau Median Household Income by State 1984–2024 – U.S. Census Bureau
+		Data sources:<br/>
+		<a href="https://www.kaggle.com/datasets/kamilpytlak/personal-key-indicators-of-heart-disease" target="_blank">
+		  Indicators of Heart Disease (2022 UPDATE) – Kaggle/CDC 2022 Survey
+		</a>,<br/>
+	  
+		<a href="https://www.cdc.gov/nchs/state-stats/deaths/heart-disease.html" target="_blank">
+		  CDC Heart Disease Deaths by State 2014–2023 – CDC
+		</a>,<br/>
+	  
+		<a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-income-households.html" target="_blank">
+		  U.S. Census Bureau Median Household Income by State 1984–2024 – U.S. Census Bureau
+		</a>,<br/>
+	  
+		<a href="https://www.cdc.gov/nchs/nvss/leading-causes-of-death.htm#data" target="_blank">
+		  National Vital Statistics System U.S. Leading Causes of Death 2017–2022
+		</a>
+	  </p>
+	  
+
+	<p>
+		Acknowledgements:
+		Created by: Chiemeka Nwakama, Emmanuel Mongare, Ibrahim Ismail-Adebiyi, Julia Christenson, Lily Li
+		Special Thanks to Professor Zhu-Tian Chen 
 	</p>
 	<p>
 		An interactive data story exploring heart disease risk factors
