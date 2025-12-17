@@ -69,7 +69,7 @@
 
 	<p>
 		<br/>Acknowledgements:
-		<br/>Created by: Chiemeka Nwakama, Emmanuel Mongare, Ibrahim Ismail-Adebiyi, Julia Christenson, Lily Li
+		<br/>Created by: Chiemeka Nwakama, Emmanuel Mongare, Ibrahim Ismail-Adebiyi, Julia Christenson, and Lily Li
 		<br/>Special Thanks to Professor Zhu-Tian Chen 
 	</p>
 	<p>
