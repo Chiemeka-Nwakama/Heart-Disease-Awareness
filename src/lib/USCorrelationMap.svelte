@@ -118,9 +118,6 @@
 <div class="container">
     
     <div class="controls">
-        <div class="bivariate-label">
-            Bivariate Choropleth: Total Deaths × Mortality Rate
-        </div>
     </div>
 
     {#if usData}

@@ -186,7 +186,7 @@
 		grid-template-columns: 300px 1fr;
 		gap: 2rem;
 		padding: 0 1.5rem 1.5rem 1.5rem;
-		align-items: start;
+		align-items: center;
 	}
 
 	.explanation-sidebar {
@@ -298,7 +298,7 @@
 
 	.viz-wrapper {
 		display: flex;
-		justify-content: flex-start;
+		justify-content: center;
 		background: white;
 		border-radius: 8px;
 		padding: 1rem;
@@ -329,7 +329,7 @@
 	}
 
 	.cell.heart-disease-col {
-		stroke: #3b82f6;
+		stroke: red;
 		stroke-width: 1.5;
 	}
 
@@ -610,8 +610,8 @@
 				<strong>{hoveredCell.value.toFixed(3)}</strong>
 			</div>
 			<div class="tooltip-row">
-				<span>Type:</span>
-				<strong>{getCorrelationDirection(hoveredCell.value)} {getCorrelationStrength(hoveredCell.value)}</strong>
+				<span>Type: </span>
+				<strong>{getCorrelationDirection(hoveredCell.value)}, {getCorrelationStrength(hoveredCell.value)}</strong>
 			</div>
 		</div>
 	{/if}
