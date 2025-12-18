@@ -35,7 +35,6 @@
         prevalenceAlcoholDrinkers: number;
         prevalenceCOPD: number;
         prevalenceDepression: number;
-        avgPhysicalActivity: number;
     }
 
     let data: LifestyleData[] = $state([]);
@@ -50,7 +49,6 @@
         { value: 'avgSleepHours', label: 'Average Sleep Hours', category: 'Lifestyle' },
         { value: 'avgSmokerScore', label: 'Smoking Status Score', category: 'Lifestyle' },
         { value: 'prevalenceAlcoholDrinkers', label: 'Alcohol Consumption Rate', category: 'Lifestyle' },
-        { value: 'avgPhysicalActivity', label: 'Physical Activity Score', category: 'Lifestyle' },
     ];
     const outcomeMetrics = [
         { value: 'mortalityRate', label: 'Heart Disease Mortality Rate', category: 'Outcome' },
@@ -125,7 +123,6 @@
                         totalAlcohol: 0,
                         totalCOPD: 0,
                         totalDepression: 0,
-                        totalPhysicalActivity: 0,
                     });
                 }
 
