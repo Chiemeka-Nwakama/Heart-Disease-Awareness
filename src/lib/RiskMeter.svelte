@@ -370,9 +370,9 @@
 						<circle cx="0" cy="0" r="6" fill="#3b82f6" />
 					</g>
 					
-								<text x="20" y="115" font-size="10" fill="#6b7280" text-anchor="middle">Low</text>
-					<text x="100" y="25" font-size="10" fill="#6b7280" text-anchor="middle">Risk</text>
-					<text x="180" y="115" font-size="10" fill="#6b7280" text-anchor="middle">High</text>
+								<text x="20" y="115" font-size="10" fill="white" text-anchor="middle">Low</text>
+					<text x="100" y="25" font-size="10" fill="white" text-anchor="middle">Risk</text>
+					<text x="180" y="115" font-size="10" fill="white" text-anchor="middle">High</text>
 				</svg>
 			</div>
 
@@ -456,7 +456,7 @@
 
  <style>
   .risk-meter-container {
-  	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  	background: linear-gradient(135deg, #667eea 0%, #3b82f6 100%);
   	border-radius: 16px;
   	padding: 2rem;
   	color: white;
