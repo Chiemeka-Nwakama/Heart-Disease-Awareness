@@ -649,7 +649,9 @@
   .factor-label {
   	font-size: 0.8rem;
   	opacity: 0.9;
+	color: white;
   }
+
   
   .factor-value {
   	font-size: 0.9rem;
