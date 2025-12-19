@@ -12,7 +12,7 @@ Chiemeka Nwakama, Julia Christenson, Lily Li, Ibrahim Ismail-Adebiyi, Emmanuel M
 ## Overview
 Heart disease is the leading cause of death in the United States and globally. Despite its prevalence, the relationships between lifestyle, demographic, geographic, and socioeconomic factors are often difficult to interpret. The goal of this project was to explore these relationships and communicate them through an interactive, data-driven website.
 
-Using a combination of individual-level survey data and aggregated state-level datasets, we created multiple interactive visualizations that allow users to explore trends, correlations, and disparities related to heart disease outcomes across the U.S. :contentReference[oaicite:0]{index=0}
+Using a combination of individual-level survey data and aggregated state-level datasets, we created multiple interactive visualizations that allow users to explore trends, correlations, and disparities related to heart disease outcomes across the U.S.
 
 ---
 
@@ -45,7 +45,7 @@ We combined microdata and aggregate data to provide both individual-level and po
 - Subset large datasets to focus on key demographic, lifestyle, and health variables
 - Aggregated and merged state-level datasets for efficient visualization
 - Conducted exploratory data analysis using Excel, Python, and Jupyter Notebooks
-- Used randomized subsampling for large datasets to improve performance and site load times :contentReference[oaicite:1]{index=1}
+- Used randomized subsampling for large datasets to improve performance and site load times
 
 ---
 
@@ -68,7 +68,7 @@ The project includes an interactive heart disease risk calculator powered by a p
 
 The regression model estimates an individual’s relative heart disease risk by comparing user inputs to national averages across similar demographic groups. The calculator is intended as an educational and explanatory tool rather than a clinical diagnostic system. Its purpose is to help users understand how controllable lifestyle factors contribute to cardiovascular risk.
 
-Model outputs are visualized using a radial gauge, allowing abstract regression results to be translated into an intuitive and interpretable format. This design reinforces the project’s goal of making complex statistical concepts accessible to a general audience :contentReference[oaicite:2]{index=2}.
+Model outputs are visualized using a radial gauge, allowing abstract regression results to be translated into an intuitive and interpretable format. This design reinforces the project’s goal of making complex statistical concepts accessible to a general audience
 
 ### Correlations: Scatterplots
 Interactive scatterplots examine relationships between state-level lifestyle indicators and heart disease outcomes. Each plot includes a fitted trend line and displays correlation values, enabling users to assess both the direction and strength of associations between variables.
