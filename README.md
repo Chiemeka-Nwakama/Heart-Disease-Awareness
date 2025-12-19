@@ -92,7 +92,7 @@ Interactive scatterplots examine relationships between state-level lifestyle ind
 ---
 
 ## Conclusion
-This project demonstrates how lifestyle, demographic, geographic, and socioeconomic factors interact to influence heart disease outcomes in the United States. Through interactive visualizations and a predictive risk model, the project emphasizes transparent, data-driven storytelling and highlights the importance of thoughtful data analysis and visualization in public health communication :contentReference[oaicite:4]{index=4}.
+This project demonstrates how lifestyle, demographic, geographic, and socioeconomic factors interact to influence heart disease outcomes in the United States. Through interactive visualizations and a predictive risk model, the project emphasizes transparent, data-driven storytelling and highlights the importance of thoughtful data analysis and visualization in public health communication
 
 ---
 
