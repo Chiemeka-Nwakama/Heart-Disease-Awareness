@@ -1,4 +1,4 @@
-# The State of Our Hearts  
+# The States of Our Hearts  
 ### Exploring Heart Disease Risk Factors in the United States
 
 **Live Project:**  
