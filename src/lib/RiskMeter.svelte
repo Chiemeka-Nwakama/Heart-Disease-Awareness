@@ -603,6 +603,8 @@
   	margin: 0 0 1rem 0;
   	font-size: 1.1rem;
   	font-weight: 600;
+	color: white;
+	font-weight: bold;
   }
   
   .factors-grid {
@@ -649,9 +651,9 @@
   .factor-label {
   	font-size: 0.8rem;
   	opacity: 0.9;
-	color: white;
   }
 
+  
   
   .factor-value {
   	font-size: 0.9rem;
