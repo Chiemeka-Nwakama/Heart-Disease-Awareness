@@ -15,7 +15,7 @@ const config = {
 			fallback: '404.html'
 		}),
 		paths: {
-			base: process.argv.includes('dev') ? '' : '/csci5609-project' 
+			base: process.argv.includes('dev') ? '' : '/Heart-Disease-Awareness' 
 		}
 	}
 };
