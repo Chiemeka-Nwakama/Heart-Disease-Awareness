@@ -753,6 +753,79 @@
       flex: 0 0 calc(50% - 6px);
     }
   }
+
+
+/* for phones    */
+
+
+/* Small phones (portrait) */
+@media (max-width: 480px) {
+  .year-card {
+    min-height: auto;
+    padding: 12px;
+  }
+
+  .year-badge {
+    font-size: 1rem;
+  }
+
+  .leader-name {
+    font-size: 0.95rem;
+  }
+
+  .year-insight p {
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+
+  .chart-card {
+    height: 360px;
+    padding-right: 14px;
+  }
+
+  .chart-tooltip {
+    font-size: 0.75rem;
+  }
+
+  .legend-item {
+    font-size: 10px;
+  }
+}
+
+/* Phones in landscape */
+@media (max-width: 900px) and (orientation: landscape) {
+  .scrolly-root {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .left-column {
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  .chart-card {
+    height: 320px;
+  }
+
+  .chart-legend {
+    max-height: 90px;
+  }
+}
+
+/* Touch-device improvements */
+@media (hover: none) {
+  .year-card:hover,
+  .legend-item:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .factor:hover {
+    transform: none;
+  }
+}
+
 </style>
 
 
